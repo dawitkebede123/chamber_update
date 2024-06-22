@@ -221,8 +221,7 @@ class _Import_listingState extends State<Construction_listing> {
   }
   //based on the index categorize SIT+A1:I15802C Description
   var items = [
- 
- "CONSTRUCTION SITE PREPARATION CONTRACTOR" ,
+"CONSTRUCTION SITE PREPARATION CONTRACTOR" ,
 "WATER WORKS CONTRACTOR" ,
 "GENERAL CONTRACTOR" ,
 "ELECTRICAL CONTRACTING & ELECTROMECHANICAL WORK CONTRACTOR" ,
@@ -256,9 +255,6 @@ class _Import_listingState extends State<Construction_listing> {
 "DEVELOPING REAL ESTATE, SUBDIVIDING REAL ESTATE INTO LOTS AND RESIDENTIAL DEVELOPMENT" ,
 "IMPORT TRADE IN MATERIAL METAL AND NON METAL SCRAPS" ,
 "ELECTRICAL CONTRACTING" ,
-
-
-
 ];
 
 // print(items);
@@ -465,13 +461,9 @@ class _Import_listingState extends State<Construction_listing> {
                        ],
                      ),)]),
                       SizedBox(height: 5,),
-                     Row(children: [
-                      Text('Sector: $sector',softWrap: true,overflow: TextOverflow.ellipsis,)
-                     ],),
+                     Text('Sector: $sector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
                      SizedBox(height: 5,),
-                      Row(children: [
-                      Text('Sub Sector: $subSector',softWrap: true,overflow: TextOverflow.ellipsis,),
-                     ],),
+                      Text('Sub Sector: $subSector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2),
                      SizedBox(height: 20,),
                  
                  

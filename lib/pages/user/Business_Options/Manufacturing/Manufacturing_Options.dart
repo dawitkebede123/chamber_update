@@ -724,13 +724,9 @@ class _Agriculture_listingState extends State<Manufacturing_listing> {
                        ],
                      ),)]),
                       SizedBox(height: 5,),
-                     Row(children: [
-                      Text('Sector: $sector',softWrap: true,overflow: TextOverflow.ellipsis,)
-                     ],),
+                     Text('Sector: $sector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
                      SizedBox(height: 5,),
-                      Row(children: [
-                      Text('Sub Sector: $subSector',softWrap: true,overflow: TextOverflow.ellipsis,),
-                     ],),
+                      Text('Sub Sector: $subSector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
                      SizedBox(height: 20,),
                  
                  

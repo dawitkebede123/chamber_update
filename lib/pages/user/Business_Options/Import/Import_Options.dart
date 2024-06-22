@@ -446,7 +446,7 @@ class _Import_listingState extends State<Import_listing> {
 "WINE" ,
 "WIRING AND CABLES ACCESSORIES" ,
 "YARNS AND THREADS" ,
-
+  ];
 // print(items);
 // for (var i = 0; i < items.length; i++) {
  items.sort((a,b)=>a.compareTo(b));
@@ -651,13 +651,9 @@ class _Import_listingState extends State<Import_listing> {
                        ],
                      ),)]),
                       SizedBox(height: 5,),
-                     Row(children: [
-                      Text('Sector: $sector',softWrap: true,overflow: TextOverflow.ellipsis,)
-                     ],),
+                     Text('Sector: $sector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
                      SizedBox(height: 5,),
-                      Row(children: [
-                      Text('Sub Sector: $subSector',softWrap: true,overflow: TextOverflow.ellipsis,),
-                     ],),
+                      Text('Sub Sector: $subSector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
                      SizedBox(height: 20,),
                  
                  

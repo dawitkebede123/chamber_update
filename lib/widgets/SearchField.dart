@@ -62,7 +62,7 @@ class _SearchFieldState extends State<SearchField> {
             .endAt(searchText + '\uffff')
             // .startAt(_searchController.text.toUpperCase())
             // .endAt(_searchController.text.toLowerCase() + '\uffff')
-            .limitToFirst(5)
+            .limitToFirst(15)
             .onValue
             .asBroadcastStream()
             .map((event) => _mapSnapshotToCompanyList(event.snapshot));
@@ -77,7 +77,7 @@ class _SearchFieldState extends State<SearchField> {
             .endAt(searchText + '\uffff')
             // .startAt(_searchController.text.toUpperCase())
             // .endAt(_searchController.text.toLowerCase() + '\uffff')
-            .limitToFirst(5)
+            .limitToFirst(15)
             .onValue
             .asBroadcastStream()
             .map((event) => _mapSnapshotToCompanyList(event.snapshot));

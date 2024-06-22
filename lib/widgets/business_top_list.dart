@@ -222,7 +222,7 @@ class _Business_Top_ListState extends State<Business_Top_List> {
     "Category": "business",
     "Is-adv": "True",
     "Image": "",
-    "Video": "et.gif",
+    "Video": "ETA.gif",
     "logo": "Ethiopia-Airlines-logo.jpg"
   },
   {
@@ -239,7 +239,7 @@ class _Business_Top_ListState extends State<Business_Top_List> {
     "Category": "business",
     "Is-adv": "True",
     "Image": "",
-    "Video": "et.gif",
+    "Video": "ETA.gif",
     "logo": "Ethiopia-Airlines-logo.jpg"
   },
   {
@@ -4334,7 +4334,7 @@ for (final element in filteredBusinesses) {
 
   Widget _buildListView() {
     return SizedBox(
-      height: 300,
+      height: 200,
       child: 
      GridView.count(
       scrollDirection: Axis.horizontal,
@@ -4362,68 +4362,65 @@ for (final element in filteredBusinesses) {
             ),
           );
         },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-          child: Column( // Change Row to Column for vertical layout
-            children: [
-              if(icon == '')
-                 Container(
-                width: 60, // Allow full width for image container
-                height: 60.0,
-                decoration: BoxDecoration(
-                  // ... decoration for the container
-                  color: Colors.white,
-                  border: Border.all(
-                    color: Colors.black,
-                  ),
-                ),
-                // if()
-                child: Center(child: Text(name[0],style: TextStyle(fontSize: 24),))
-               
-              ),
-              if(icon !='')    
-              Container(
-                width: 60, // Allow full width for image container
-                height: 60.0,
-                decoration: const BoxDecoration(
-                  // ... decoration for the container
-                  color: Colors.white,
-                  // border: Border.all(
-                  //   color: Colors.black,
-                  // ),
-                ),
-                // if()
-                child: FutureBuilder<String>(
-                  
-                  future: imageUrlFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Image.network(snapshot.data!);
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      return Text('');
-                      // CircularProgressIndicator();
-                    }
-                  },
+        child: Column( // Change Row to Column for vertical layout
+          children: [
+            if(icon == '')
+               Container(
+              width: 60, // Allow full width for image container
+              height: 60.0,
+              decoration: BoxDecoration(
+                // ... decoration for the container
+                color: Colors.white,
+                border: Border.all(
+                  color: Colors.black,
                 ),
               ),
-
-
-
-              SizedBox(height: 10.0), // Adjust spacing between image and text
-                Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Text(
-                  name,
-                  style: TextStyle(fontSize: 12),
-                  textAlign: TextAlign.left,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
+              // if()
+              child: Center(child: Text(name[0],style: TextStyle(fontSize: 24),))
+             
+            ),
+            if(icon !='')    
+            Container(
+              width: 60, // Allow full width for image container
+              height: 60.0,
+              decoration: const BoxDecoration(
+                // ... decoration for the container
+                color: Colors.white,
+                // border: Border.all(
+                //   color: Colors.black,
+                // ),
               ),
-            ],
-          ),
+              // if()
+              child: FutureBuilder<String>(
+                
+                future: imageUrlFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Image.network(snapshot.data!);
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return Text('');
+                    // CircularProgressIndicator();
+                  }
+                },
+              ),
+            ),
+        
+        
+        
+            SizedBox(height: 10.0), // Adjust spacing between image and text
+              Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text(
+                name,
+                style: TextStyle(fontSize: 12),
+                textAlign: TextAlign.left,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
         ),
       ),
     );

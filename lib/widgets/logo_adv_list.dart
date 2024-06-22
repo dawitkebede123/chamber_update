@@ -211,7 +211,7 @@ class _Logo_Adv_ListState extends State<Logo_Adv_List> {
     "Category": "business",
     "Is-adv": "True",
     "Image": "",
-    "Video": "et.gif",
+    "Video": "ETA.gif",
     "logo": "Ethiopia-Airlines-logo.jpg"
   },
   {
@@ -228,7 +228,7 @@ class _Logo_Adv_ListState extends State<Logo_Adv_List> {
     "Category": "business",
     "Is-adv": "True",
     "Image": "",
-    "Video": "et.gif",
+    "Video": "ETA.gif",
     "logo": "Ethiopia-Airlines-logo.jpg"
   },
   {
@@ -330,7 +330,7 @@ class _Logo_Adv_ListState extends State<Logo_Adv_List> {
     "Category": "business",
     "Is-adv": "True",
     "Image": "",
-    "Video": "",
+    "Video": "TL.gif",
     "logo": "TL-trading.jpg"
   },
   {
@@ -347,7 +347,7 @@ class _Logo_Adv_ListState extends State<Logo_Adv_List> {
     "Category": "business",
     "Is-adv": "True",
     "Image": "",
-    "Video": "",
+    "Video": "TL.gif",
     "logo": "TL-trading.jpg"
   },
   {
@@ -364,7 +364,7 @@ class _Logo_Adv_ListState extends State<Logo_Adv_List> {
     "Category": "business",
     "Is-adv": "True",
     "Image": "",
-    "Video": "",
+    "Video": "TL.gif",
     "logo": "TL-trading.jpg"
   },
   {
@@ -1027,7 +1027,7 @@ class _Logo_Adv_ListState extends State<Logo_Adv_List> {
     "Category": "business",
     "Is-adv": "True",
     "Image": "",
-    "Video": "",
+    "Video": "Ziad mohammed.gif",
     "logo": "ZID-logo.jpg"
   },
   {
@@ -1044,7 +1044,7 @@ class _Logo_Adv_ListState extends State<Logo_Adv_List> {
     "Category": "business",
     "Is-adv": "True",
     "Image": "",
-    "Video": "",
+    "Video": "Ziad mohammed.gif",
     "logo": "ZID-logo.jpg"
   },
   {
@@ -1061,7 +1061,7 @@ class _Logo_Adv_ListState extends State<Logo_Adv_List> {
     "Category": "business",
     "Is-adv": "True",
     "Image": "",
-    "Video": "",
+    "Video": "Ziad mohammed.gif",
     "logo": "ZID-logo.jpg"
   },
   {
@@ -1078,7 +1078,7 @@ class _Logo_Adv_ListState extends State<Logo_Adv_List> {
     "Category": "business",
     "Is-adv": "True",
     "Image": "",
-    "Video": "",
+    "Video": "Ziad mohammed.gif",
     "logo": "ZID-logo.jpg"
   },
   {
@@ -1486,7 +1486,7 @@ class _Logo_Adv_ListState extends State<Logo_Adv_List> {
     "Category": "business",
     "Is-adv": "True",
     "Image": "",
-    "Video": "SOAL.gif.gif",
+    "Video": "",
     "logo": "soal-last-edited.jpg"
   },
   {

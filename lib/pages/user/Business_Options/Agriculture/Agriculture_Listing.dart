@@ -237,7 +237,7 @@ class _Agriculture_listingState extends State<Agriculture_listing> {
 "BEE KEEPING" ,
 "CATTLE AND PACK ANIMALS HUSBANDARY" ,
 "FISH HATCHERIES AND FISH FARMS" ,
-"Farming of cattle, sheep, goats, horses, asses, mules and hinnies; dairy farming" ,
+"DAIRY FARMING" ,
 "COFFEE FARMING" ,
 "FLORICULTURE" ,
 "GROWING OF HERBS AND OTHERS" ,
@@ -451,13 +451,9 @@ class _Agriculture_listingState extends State<Agriculture_listing> {
                        ],
                      ),)]),
                       SizedBox(height: 5,),
-                     Row(children: [
-                      Text('Sector: $sector',softWrap: true,overflow: TextOverflow.ellipsis,)
-                     ],),
+                     Text('Sector: $sector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
                      SizedBox(height: 5,),
-                      Row(children: [
-                      Text('Sub Sector: $subSector',softWrap: true,overflow: TextOverflow.ellipsis,),
-                     ],),
+                      Text('Sub Sector: $subSector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
                      SizedBox(height: 20,),
                  
                  

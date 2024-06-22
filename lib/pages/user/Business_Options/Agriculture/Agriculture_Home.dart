@@ -48,7 +48,7 @@ class _Agriculture_HomeState extends State<Agriculture_Home> {
 "BEE KEEPING" ,
 "CATTLE AND PACK ANIMALS HUSBANDARY" ,
 "FISH HATCHERIES AND FISH FARMS" ,
-"Farming of cattle, sheep, goats, horses, asses, mules and hinnies; dairy farming" ,
+"DAIRY FARMING" ,
 "COFFEE FARMING" ,
 "FLORICULTURE" ,
 "GROWING OF HERBS AND OTHERS" ,

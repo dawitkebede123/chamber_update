@@ -229,20 +229,20 @@ class _CompanyDescriptionState extends State<CompanyDescription> {
               Spacer(),
               IconButton(onPressed: () async{
                 ScaffoldMessenger.of(context).clearSnackBars();
-                if(isFavorite){
-                  //  Provider.of<ThemeProvider>(context,listen: false).toggleTheme(),
-                 provider.removeFromFavorites(arg);
-                  // provider.removeFromFavorites
-                  // box.delete(name);
+                // if(isFavorite){
+                //   //  Provider.of<ThemeProvider>(context,listen: false).toggleTheme(),
+                //  provider.removeFromFavorites(arg);
+                //   // provider.removeFromFavorites
+                //   // box.delete(name);
         
-                 const snackBar = SnackBar(content: Text('Remove successfully'),
-                backgroundColor: Colors.blue,
+                //  const snackBar = SnackBar(content: Text('Remove successfully'),
+                // backgroundColor: Colors.blue,
         
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                // );
+                // ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   
-                }
-                else{
+                // }
+                // else{
                 provider.addToFavorites(arg);
         
                 // await box.put(name,video);
@@ -251,7 +251,7 @@ class _CompanyDescriptionState extends State<CompanyDescription> {
                 
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                }
+                // }
                
               },
               

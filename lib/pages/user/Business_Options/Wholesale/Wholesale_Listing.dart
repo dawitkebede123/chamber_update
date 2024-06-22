@@ -471,7 +471,6 @@ class _Wholesale_listingState extends State<Wholesale_listing> {
 "IMPORTING OF VEHICLES" ,
 "IMPORTING OF VEHICLES SPARE PARTS,REGULATORY EQUIPMENTS AND JEWELRY/DECOR SUPPLIES" ,
 "NEW MOTOR VEHICLES" ,
-"BASIC CHEMICALS, EXCEPT FERTILIZERS" ,
 "PETROCHEMICAL/VASELINE, GRYCYLINE ETC/ PRODUCTS" ,
 "INDUSTRIAL MACHINERY , EQUIPMENT AND ITS SPARE PARTS" ,
 "USED MOTOR VEHICLES" ,
@@ -688,13 +687,9 @@ items.sort((a,b)=>a.compareTo(b));
                        ],
                      ),)]),
                       SizedBox(height: 5,),
-                     Row(children: [
-                      Text('Sector: $sector',softWrap: true,overflow: TextOverflow.ellipsis,)
-                     ],),
+                     Text('Sector: $sector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
                      SizedBox(height: 5,),
-                      Row(children: [
-                      Text('Sub Sector: $subSector',softWrap: true,overflow: TextOverflow.ellipsis,),
-                     ],),
+                      Text('Sub Sector: $subSector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
                      SizedBox(height: 20,),
                  
                  
