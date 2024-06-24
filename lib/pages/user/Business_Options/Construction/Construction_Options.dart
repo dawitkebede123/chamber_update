@@ -2,6 +2,7 @@
 import 'package:chamber_of_commerce/main.dart';
 import 'package:chamber_of_commerce/pages/user/Business.dart';
 import 'package:chamber_of_commerce/pages/user/Business_Options/Agriculture/Agriculture_Home.dart';
+import 'package:chamber_of_commerce/pages/user/Business_Options/Community/Community_Home.dart';
 import 'package:chamber_of_commerce/pages/user/Business_Options/Construction/Construction_Home.dart';
 import 'package:chamber_of_commerce/pages/user/Business_Options/Export/Export_Home.dart';
 import 'package:chamber_of_commerce/pages/user/Business_Options/Import/Import_Home.dart';
@@ -32,10 +33,10 @@ class Construction_listing extends StatefulWidget {
   final List<Map<String, String>> businessCompanyProfile ;
   const Construction_listing({super.key,required this.index,required this.title,required this.businessCompanyProfile});
   @override
-  State<Construction_listing> createState() => _Import_listingState();
+  State<Construction_listing> createState() => _Construction_listingState();
 }
 
-class _Import_listingState extends State<Construction_listing> {
+class _Construction_listingState extends State<Construction_listing> {
    Stream<DatabaseEvent>? _userStream;
   // final Map data = widget.businessCompanyProfile[""];
    
@@ -221,40 +222,41 @@ class _Import_listingState extends State<Construction_listing> {
   }
   //based on the index categorize SIT+A1:I15802C Description
   var items = [
+ 
+"BUILDING AND ROAD CONSTRUCTION CONTRACTOR" ,
+"BUILDING COMPLETION" ,
+"BUILDING FINISHING SERVICE" ,
+"BUILDING OF COMPLETE CONSTRUCTIONS AND CIVIL ENGINEERING" ,
+"BUILDING WORKS CONTRACTOR" ,
+"BUILDINGS CONTRACTOR" ,
+"CONSTRUCTION AND RELATED SPECIALIZED CONSULTANCY SERVICES" ,
+"CONSTRUCTION COMPLETING/FINISHING CONTRACTOR" ,
+"CONSTRUCTION MATERIALS" ,
+"CONSTRUCTION MATERIALS HARDWARE, PLUMBING AND HEATING EQUIPMENT AND SUPPLIES" ,
+"CONSTRUCTION OF BUILDINGS" ,
+"Construction of civil engineering structures" ,
+"CONSTRUCTION OF WATER WORKS" ,
 "CONSTRUCTION SITE PREPARATION CONTRACTOR" ,
-"WATER WORKS CONTRACTOR" ,
-"GENERAL CONTRACTOR" ,
+"CONSULTANCY SERVICE ON CONSTRUCTION SERVICE" ,
+"DECORATING ACTIVITIES" ,
+"DEVELOPING REAL ESTATE, SUBDIVIDING REAL ESTATE INTO LOTS AND RESIDENTIAL DEVELOPMENT" ,
+"ELECTRICAL CONTRACTING" ,
 "ELECTRICAL CONTRACTING & ELECTROMECHANICAL WORK CONTRACTOR" ,
 "ELECTROMECHANICAL WORK" ,
-"CONSTRUCTION OF WATER WORKS" ,
-"SOLI TESTING WORK" ,
-"BUILDING OF COMPLETE CONSTRUCTIONS AND CIVIL ENGINEERING" ,
-"BUILDING AND ROAD CONSTRUCTION CONTRACTOR" ,
-"CONSTRUCTION OF BUILDINGS" ,
-"BUILDING WORKS CONTRACTOR" ,
-"PILE FOUNDATION WORK CONTRACTOR" ,
-"WATER WELL DRILLING OR CLEARING WORKS" ,
-"ROAD WORKS CONTRACTOR" ,
+"GENERAL CONTRACTOR" ,
+"GENERAL CONTRACTOR EXCEPT WATER ELECTRIC AND ELECTRO MECHANICAL WORK" ,
+"HOUSEHOLD APPLIANCE" ,
+"IMPORT TRADE IN MATERIAL METAL AND NON METAL SCRAPS" ,
 "INDUSTRIAL MACHINERY , EQUIPMENT AND ITS SPARE PARTS" ,
 "LAND EXCAVATING & BEAUTIFICATION" ,
-"Construction of civil engineering structures" ,
+"PILE FOUNDATION WORK CONTRACTOR" ,
 "PLUMBING" ,
-"GENERAL CONTRACTOR EXCEPT WATER ELECTRIC AND ELECTRO MECHANICAL WORK" ,
-"CONSTRUCTION AND RELATED SPECIALIZED CONSULTANCY SERVICES" ,
-"BUILDINGS CONTRACTOR" ,
-"BUILDING FINISHING SERVICE" ,
-"CONSULTANCY SERVICE ON CONSTRUCTION SERVICE" ,
-"CONSTRUCTION COMPLETING/FINISHING CONTRACTOR" ,
-"RENTING OF CONSTRUCTION AND CIVIL ENGINEERING MACHINERY AND EQUIPMENT" ,
-"CONSTRUCTION MATERIALS" ,
-"BUILDING COMPLETION" ,
-"DECORATING ACTIVITIES" ,
-"HOUSEHOLD APPLIANCE" ,
 "PROPERTY OWNING AND LETTING" ,
-"CONSTRUCTION MATERIALS HARDWARE, PLUMBING AND HEATING EQUIPMENT AND SUPPLIES" ,
-"DEVELOPING REAL ESTATE, SUBDIVIDING REAL ESTATE INTO LOTS AND RESIDENTIAL DEVELOPMENT" ,
-"IMPORT TRADE IN MATERIAL METAL AND NON METAL SCRAPS" ,
-"ELECTRICAL CONTRACTING" ,
+"RENTING OF CONSTRUCTION AND CIVIL ENGINEERING MACHINERY AND EQUIPMENT" ,
+"ROAD WORKS CONTRACTOR" ,
+"SOLI TESTING WORK" ,
+"WATER WELL DRILLING OR CLEARING WORKS" ,
+"WATER WORKS CONTRACTOR" ,
 ];
 
 // print(items);
@@ -267,7 +269,7 @@ class _Import_listingState extends State<Construction_listing> {
     // print(data);
     filteredBusinesses = filteredBusinesses.expand((element) {
       // ... filtering logic using entry.value as Map<String, dynamic>
-      final company = element['Sub-Sector']?.toString() ?? '';
+      final company = element['Sub-Sector']?.toString().toUpperCase() ?? '';
       return company.startsWith("${currentItem}") ? [element] : [];
     }).toList();
   // print(i);ite
@@ -463,7 +465,7 @@ class _Import_listingState extends State<Construction_listing> {
                       SizedBox(height: 5,),
                      Text('Sector: $sector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
                      SizedBox(height: 5,),
-                      Text('Sub Sector: $subSector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2),
+                      Text('Sub Sector: $subSector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
                      SizedBox(height: 20,),
                  
                  

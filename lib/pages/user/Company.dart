@@ -342,6 +342,11 @@ class _CompanyState extends State<Company> {
              child:Image.asset(image),
             ),
           ),
+
+           Padding(padding: EdgeInsets.only(left: 20,right: 20),
+          child: Text("Sector: $sector",textAlign: TextAlign.start,maxLines: 2,),
+          ),
+         SizedBox(height: 20,),
            Container(
                       width: 200,
         

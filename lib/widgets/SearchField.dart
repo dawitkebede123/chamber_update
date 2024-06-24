@@ -1,5 +1,6 @@
 import 'dart:async';
 // import 'dart:ffi';
+import 'package:chamber_of_commerce/pages/user/Company_detail_almanac.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -344,19 +345,35 @@ for (final element in data) {
       return Center(child: Text('No companies found.'));
     }
     return ListView.builder(
+      
       itemCount: companies.length,
       itemBuilder: (context, index) {
+
         final company = companies[index];
+    print(companies);
+
         final name = company['Account Name'];
+
         return ListTile(
           title: Text(name),
           onTap: () {
-            Navigator.push(
+            if(company['Category']=="business"){
+  Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => CompanyDetail(data: company),
               ),
             );
+            }
+            else{
+               Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CompanyDetailAlmanac(data: company),
+              ),
+            );
+            }
+          
           },
         );
       },

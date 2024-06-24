@@ -3,6 +3,7 @@ import 'package:chamber_of_commerce/main.dart';
 import 'package:chamber_of_commerce/pages/user/Business.dart';
 import 'package:chamber_of_commerce/pages/user/Business_Options/Agriculture/Agriculture_Home.dart';
 import 'package:chamber_of_commerce/pages/user/Business_Options/Export/Export_Home.dart';
+import 'package:chamber_of_commerce/pages/user/Business_Options/Hotel/Hotel_Home.dart';
 import 'package:chamber_of_commerce/pages/user/Business_Options/Import/Import_Home.dart';
 import 'package:chamber_of_commerce/pages/user/Company%20_business.dart';
 import 'package:chamber_of_commerce/pages/user/Company.dart';
@@ -220,7 +221,7 @@ class _Import_listingState extends State<Import_listing> {
   }
   //based on the index categorize SIT+A1:I15802C Description
   var items = [
-   "ACCESSORIES AND COMPONENTS FOR FINISHING TEXTILE AND LEATHER PRODUCTS" ,
+"ACCESSORIES AND COMPONENTS FOR FINISHING TEXTILE AND LEATHER PRODUCTS" ,
 "AGRICULTURAL MACHINERY AND EQUIPMENT" ,
 "AGRICULTURAL PRODUCTS/CEREALS" ,
 "AGRICULTURAL RAW MATERIALS" ,
@@ -435,7 +436,7 @@ class _Import_listingState extends State<Import_listing> {
 "TOYS AND GAMES" ,
 "TRADE AUXILIARY" ,
 "TRADE IN FOOD" ,
-"TYRE REPAIRS" ,
+"Tyre Repairs" ,
 "TYRES AND CAR BATTERIES" ,
 "USED MOTOR VEHICLES" ,
 "VEHICLE SPARE PARTS" ,
@@ -446,7 +447,8 @@ class _Import_listingState extends State<Import_listing> {
 "WINE" ,
 "WIRING AND CABLES ACCESSORIES" ,
 "YARNS AND THREADS" ,
-  ];
+];
+
 // print(items);
 // for (var i = 0; i < items.length; i++) {
  items.sort((a,b)=>a.compareTo(b));

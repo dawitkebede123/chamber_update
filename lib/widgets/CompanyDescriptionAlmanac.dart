@@ -27,15 +27,15 @@ import 'package:http/http.dart' as http;
 import 'package:hive_flutter/hive_flutter.dart';
 
 
-class CompanyDescription extends StatefulWidget {
+class CompanyDescriptionAlmanac extends StatefulWidget {
   final Map<dynamic, dynamic> detail;
-  CompanyDescription({super.key,required this.detail});
+  CompanyDescriptionAlmanac({super.key,required this.detail});
 
   @override
-  State<CompanyDescription> createState() => _CompanyDescriptionState();
+  State<CompanyDescriptionAlmanac> createState() => _CompanyDescriptionState();
 }
 
-class _CompanyDescriptionState extends State<CompanyDescription> {
+class _CompanyDescriptionState extends State<CompanyDescriptionAlmanac> {
    Future<String> storeImageInFirebase(String fileName) async {
   try {
     final storage  = FirebaseStorage.instance.ref();
@@ -97,17 +97,18 @@ class _CompanyDescriptionState extends State<CompanyDescription> {
      final provider = Provider.of<FavoriteListProvider>(context);
 
     // String sector = widget.detail["sector"].toString();
-    String  name =widget.detail['Account Name'].toString();
-    String logo = widget.detail["logo"].toString();
+    String  name =widget.detail['Account Name'];
+    String logo = widget.detail["logo"];
     // String  profile = '';
-    String image = widget.detail["Image"].toString();
+    String image = widget.detail["Image"];
     // print('test');
     // print(image);
     String video = widget.detail["Video"];
     String tel = widget.detail["Tel"].toString();
-    String email = widget.detail["Email"].toString();
-    String profile = widget.detail["Profile"].toString();
-    final website = widget.detail["Website"];
+    String mobile = widget.detail["Mobile Phone"].toString();
+    String email = widget.detail["E-mail"];
+    String profile = widget.detail["Profile"];
+    final website = widget.detail["Web"];
     final sector = widget.detail["Sector"];
     final sub_sector = widget.detail["Sub-Sector"];
     // final sub_sector = widget.detail["Sub-Sector"];
@@ -289,8 +290,10 @@ class _CompanyDescriptionState extends State<CompanyDescription> {
                 String? videoType;
                 Future<String?> type = getVideoType(snapshot.data!);
                 type.then((value) => videoType = value);
-          
+                print(snapshot.data!);
+                print(videoType);
                 if (snapshot.hasData && videoType=='mp4') {
+                    print('video');
                   // Display video
                   return VideoPlayerWidget(videoUrl: snapshot.data!);
                 } else {
