@@ -9,6 +9,7 @@ import 'package:chamber_of_commerce/pages/user/Company.dart';
 import 'package:chamber_of_commerce/pages/user/Company_detail.dart';
 import 'package:chamber_of_commerce/pages/user/Home.dart';
 import 'package:chamber_of_commerce/widgets/BottomNavBar.dart';
+import 'package:chamber_of_commerce/widgets/ContactTemplete.dart';
 import 'package:chamber_of_commerce/widgets/CustomBottomNavBar.dart';
 import 'package:chamber_of_commerce/widgets/GridScreen.dart';
 import 'package:chamber_of_commerce/widgets/GridSingle.dart';
@@ -375,102 +376,103 @@ items.sort((a,b)=>a.compareTo(b));
                          
                      //   ],
                      // ),
-                     if(tel !="")
-                     Row(
-                       children: [
-                         InkWell( // Wrap the content in an InkWell
-                 onTap: () {
-                   launch('tel:$tel'); // Launch the phone dialer with the number
-                 },
-                        child: Row(
-                           children: [
-                              Container(
-                               // width: 20,
-                               // height: 20,
-                               decoration: BoxDecoration(
+                //      if(tel !="")
+                //      Row(
+                //        children: [
+                //          InkWell( // Wrap the content in an InkWell
+                //  onTap: () {
+                //    launch('tel:$tel'); // Launch the phone dialer with the number
+                //  },
+                //         child: Row(
+                //            children: [
+                //               Container(
+                //                // width: 20,
+                //                // height: 20,
+                //                decoration: BoxDecoration(
                      
-                         color: Color.fromARGB(255, 255, 255, 255),
+                //          color: Color.fromARGB(255, 255, 255, 255),
                  
-                 borderRadius:BorderRadius.circular(999), // Set border width
+                //  borderRadius:BorderRadius.circular(999), // Set border width
                  
-                   ),
-                               child: SvgPicture.asset('assets/images/vector1.svg',width: 10,height: 10,)),
-                             SizedBox(width: 10,),
-                             Text(tel,softWrap: true,overflow: TextOverflow.ellipsis,),
-                           ],
-                         ),),
-                       ],
-                     ),
-                     SizedBox(height: 5,),
+                //    ),
+                //                child: SvgPicture.asset('assets/images/vector1.svg',width: 10,height: 10,)),
+                //              SizedBox(width: 10,),
+                //              Text(tel,softWrap: true,overflow: TextOverflow.ellipsis,),
+                //            ],
+                //          ),),
+                //        ],
+                //      ),
+                //      SizedBox(height: 5,),
                     
-                      if(website !="")
-                     Row(
-                     children: [
-                      InkWell( // Wrap the content in an InkWell
-                         onTap: () {
-                           launch(website); // Launch the URL in a web browser
-                 },
-                       child:Row(
-                       children: [
-                          Container(
-                           // width: 20,
-                           // height: 20,
-                           decoration: BoxDecoration(
+                //       if(website !="")
+                //      Row(
+                //      children: [
+                //       InkWell( // Wrap the content in an InkWell
+                //          onTap: () {
+                //            launch(website); // Launch the URL in a web browser
+                //  },
+                //        child:Row(
+                //        children: [
+                //           Container(
+                //            // width: 20,
+                //            // height: 20,
+                //            decoration: BoxDecoration(
                      
-                         color: Color.fromARGB(255, 255, 255, 255),
+                //          color: Color.fromARGB(255, 255, 255, 255),
                  
-                 borderRadius:BorderRadius.circular(999), // Set border width
+                //  borderRadius:BorderRadius.circular(999), // Set border width
                  
-                   ),
-                           child: SvgPicture.asset('assets/images/vector.svg',width: 10,height: 10,)),
-                         SizedBox(width: 10,),
-                         Text(website,softWrap: true,overflow: TextOverflow.ellipsis,),
-                       ],
-                     )),],),
-                      SizedBox(height: 5,),
-                      if(mobile !="")
-                     Row(
-                       children: [
-                          Container(
-                           // width: 10,
-                           // height: 10,
-                           decoration: BoxDecoration(
+                //    ),
+                //            child: SvgPicture.asset('assets/images/vector.svg',width: 10,height: 10,)),
+                //          SizedBox(width: 10,),
+                //          Text(website,softWrap: true,overflow: TextOverflow.ellipsis,),
+                //        ],
+                //      )),],),
+                //       SizedBox(height: 5,),
+                //       if(mobile !="")
+                //      Row(
+                //        children: [
+                //           Container(
+                //            // width: 10,
+                //            // height: 10,
+                //            decoration: BoxDecoration(
                      
-                         color: Color.fromARGB(255, 255, 255, 255),
+                //          color: Color.fromARGB(255, 255, 255, 255),
                  
-                 borderRadius:BorderRadius.circular(999), // Set border width
+                //  borderRadius:BorderRadius.circular(999), // Set border width
                  
-                   ),
-                           child: SvgPicture.asset('assets/images/vector3.svg',width: 10,height: 10,)),
-                         SizedBox(width: 10,),
-                         Text(mobile,softWrap: true,overflow: TextOverflow.ellipsis,),
-                       ],
-                     ),
-                      SizedBox(height: 5,),
-                       if(email !="")
-                     Row(
-                   children: [
-                     InkWell( // Wrap the content in an InkWell
-                 onTap: () {
-                   launch('mailto:$email'); // Launch email app with recipient
-                 },
-                 child: Row(
-                       children: [
-                          Container(
-                           // width: 20,
-                           // height: 20,
-                           decoration: BoxDecoration(
+                //    ),
+                //            child: SvgPicture.asset('assets/images/vector3.svg',width: 10,height: 10,)),
+                //          SizedBox(width: 10,),
+                //          Text(mobile,softWrap: true,overflow: TextOverflow.ellipsis,),
+                //        ],
+                //      ),
+                //       SizedBox(height: 5,),
+                //        if(email !="")
+                //      Row(
+                //    children: [
+                //      InkWell( // Wrap the content in an InkWell
+                //  onTap: () {
+                //    launch('mailto:$email'); // Launch email app with recipient
+                //  },
+                //  child: Row(
+                //        children: [
+                //           Container(
+                //            // width: 20,
+                //            // height: 20,
+                //            decoration: BoxDecoration(
                      
-                         color: Color.fromARGB(255, 255, 255, 255),
+                //          color: Color.fromARGB(255, 255, 255, 255),
                  
-                 borderRadius:BorderRadius.circular(999), // Set border width
+                //  borderRadius:BorderRadius.circular(999), // Set border width
                  
-                   ),
-                           child: SvgPicture.asset('assets/images/vector2.svg',width: 10,height: 10,)),
-                          SizedBox(width: 10,),
-                         Text(email,softWrap: true,overflow: TextOverflow.ellipsis,),
-                       ],
-                     ),)]),
+                //    ),
+                //            child: SvgPicture.asset('assets/images/vector2.svg',width: 10,height: 10,)),
+                //           SizedBox(width: 10,),
+                //          Text(email,softWrap: true,overflow: TextOverflow.ellipsis,),
+                //        ],
+                //      ),)]),
+                 ContactTemeplete(tel: tel,mobile: mobile,email: email, website: website,),
                       SizedBox(height: 5,),
                      Text('Sector: $sector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2),
                      SizedBox(height: 5,),

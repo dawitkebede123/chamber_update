@@ -51,7 +51,7 @@ class _ContactTemepleteState extends State<ContactTemeplete> {
                                      ),
                                    SizedBox(width: 10,),
 
-                                    Text('$tel',softWrap: true,overflow: TextOverflow.ellipsis,),
+                                    Text('$tel',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
                                 
                                       // SvgPicture.asset('assets/images/vector1.svg',width: 10,height: 10,),
 
@@ -63,13 +63,15 @@ class _ContactTemepleteState extends State<ContactTemeplete> {
          if(mobile!='')
           Padding(
                padding: const EdgeInsets.only(left: 20.0,right: 20),
-               child: Row(
+               child:  
+               Row(
                              children: [
                                InkWell( // Wrap the content in an InkWell
                                               onTap: () {
                                                 launch('tel:$mobile'); // Launch the phone dialer with the number
                                               },
-                              child: Row(
+                              child: 
+                              Row(
                                  children: [
                                    Padding(
                                      padding: const EdgeInsets.all(8.0),
@@ -85,9 +87,10 @@ class _ContactTemepleteState extends State<ContactTemeplete> {
                                                          )),
                                    ),
                                    SizedBox(width: 10,),
-                                   Text('$mobile',softWrap: true,overflow: TextOverflow.ellipsis,),
+                                   Text('$mobile',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
                                  ],
-                               ),),
+                               ),
+                               ),
                              ],
                            ),
              ),
@@ -118,7 +121,7 @@ class _ContactTemepleteState extends State<ContactTemeplete> {
                                    ),
                              
                              SizedBox(width: 10,),
-                             Text(website,softWrap: true,overflow: TextOverflow.ellipsis,),
+                             Text(website,softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
                            ],
                          )),],),
                        ),
@@ -148,7 +151,7 @@ class _ContactTemepleteState extends State<ContactTemeplete> {
                                      ),
                               
                               SizedBox(width: 10,),
-                             Text(email,softWrap: true,overflow: TextOverflow.ellipsis,),
+                             Text(email,softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
                            ],
                          ),)]),
                        ),
