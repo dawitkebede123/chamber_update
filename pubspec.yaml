@@ -136,7 +136,6 @@ flutter:
     - assets/images/social_media_icons/twitter.svg
     - assets/images/social_media_icons/linkedin.svg
     - assets/images/Adv_slider.svg
-    # - assets/video/Ethswitch.gif
     - assets/images/almanac_lists/telecom_logos/mpessa.jpg
     - assets/images/almanac_lists/1.svg
     - assets/images/almanac_lists/3.svg
@@ -237,16 +236,17 @@ flutter:
     - assets/images/almanac_lists/adv/23.jpg
     - assets/images/almanac_lists/adv/24.jpg
     - assets/images/almanac_lists/adv/25.jpg
-    # - assets/video/Awash Bank.gif
-    # - assets/video/Awash Insurance.gif
-    # - assets/video/Birhan Bank.gif
-    # - assets/video/Dashen Bank.gif
-    # - assets/video/Ethio Life.gif
-    # - assets/video/Hibret Bank.gif
-    # - assets/video/Kacha.gif
-    # - assets/video/Nib Insurance.gif
-    # - assets/video/Oromia Bank.gif
-    # - assets/video/Tsedey Bank.gif
+    - assets/video/Awash.gif
+    - assets/video/Awash_Insurance.gif
+    - assets/video/Birhan_Bank.gif
+    - assets/video/Dashen_Bank.gif
+    - assets/video/Ethio_Life.gif
+    - assets/video/Hibret_Bank.gif
+    - assets/video/Kacha.gif
+    - assets/video/Nib_Insurance.gif
+    - assets/video/Oromia_Bank.gif
+    - assets/video/Tsedey_Bank.gif
+    - assets/video/Ethswitch.gif
     - assets/images/almanac_lists/adv_logo/ethio.jpg
     - assets/images/almanac_lists/adv_logo/awash.jpg
     - assets/images/almanac_lists/adv_logo/kacha.jpg

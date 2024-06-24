@@ -274,11 +274,16 @@ class _CompanyState extends State<Company> {
        Container(
           height: 200,
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-          child: Padding(
+          child:  Padding(
             padding: EdgeInsets.all(30),
             child: Center(
         child: Stack( // Use a Stack to conditionally display content
           children: [
+            Container(
+              child:
+               Image.asset(video) 
+               ,
+            )
             // FutureBuilder<String>(
             //   future: imageUrlFutureGif,
             //   builder: (context, snapshot) {
@@ -291,45 +296,45 @@ class _CompanyState extends State<Company> {
             //     }
             //   },
             // ),
-            FutureBuilder<String>(
-              future: videoUrlFuture,
-              builder: (context, snapshot) {
-                // print(snapshot.data);
-                // print(getVideoType(snapshot.data!));
-                String? videoType;
-                Future<String?> type = getVideoType(snapshot.data!);
-                type.then((value) => videoType = value);
-                // print(snapshot.data!);
-                // print(videoType);
-                if (snapshot.hasData && videoType=='mp4') {
-                    print('video');
-                  // Display video
-                  return VideoPlayerWidget(videoUrl: snapshot.data!);
-                } else {
-                  return  Container(
-              //  width:MediaQuery.of(context).size.width * 0.20,
-             child: FutureBuilder<String>(
-            future: imageUrlFutureGif,
-            builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Image.network(snapshot.data!); 
-          // print("test");// Use the downloaded URL
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}'); // Handle errors
-        }
+        //     FutureBuilder<String>(
+        //       future: videoUrlFuture,
+        //       builder: (context, snapshot) {
+        //         // print(snapshot.data);
+        //         // print(getVideoType(snapshot.data!));
+        //         String? videoType;
+        //         Future<String?> type = getVideoType(snapshot.data!);
+        //         type.then((value) => videoType = value);
+        //         // print(snapshot.data!);
+        //         // print(videoType);
+        //         if (snapshot.hasData && videoType=='mp4') {
+        //             // print('video');
+        //           // Display video
+        //           return VideoPlayerWidget(videoUrl: snapshot.data!);
+        //         } else {
+        //           return  Container(
+        //       //  width:MediaQuery.of(context).size.width * 0.20,
+        //      child: FutureBuilder<String>(
+        //     future: imageUrlFutureGif,
+        //     builder: (context, snapshot) {
+        // if (snapshot.hasData) {
+        //   return Image.network(snapshot.data!); 
+        //   // print("test");// Use the downloaded URL
+        // } else if (snapshot.hasError) {
+        //   return Text('Error: ${snapshot.error}'); // Handle errors
+        // }
         
-        // Display a loading indicator while waiting
-        return const CircularProgressIndicator();
-            },
-          ),
+        // // Display a loading indicator while waiting
+        // return const CircularProgressIndicator();
+        //     },
+        //   ),
         
-            );
+        //     );
                   
-                  // VideoPlayerGif(gifUrl: snapshot.data!);
-                  // Container(); // Placeholder for non-video content
-                };
-              },
-            ),
+        //           // VideoPlayerGif(gifUrl: snapshot.data!);
+        //           // Container(); // Placeholder for non-video content
+        //         };
+        //       },
+        //     ),
           ],
         ),
             ),
