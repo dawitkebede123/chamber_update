@@ -293,7 +293,8 @@ class _Agriculture_listingState extends State<Agriculture_listing> {
                  
                      
          
-                   ],))
+                   ],)
+                   )
                     
                  ),
                ),
