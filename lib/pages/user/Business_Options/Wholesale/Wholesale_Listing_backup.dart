@@ -3,13 +3,13 @@ import 'package:chamber_of_commerce/main.dart';
 import 'package:chamber_of_commerce/pages/user/Business.dart';
 import 'package:chamber_of_commerce/pages/user/Business_Options/Agriculture/Agriculture_Home.dart';
 import 'package:chamber_of_commerce/pages/user/Business_Options/Export/Export_Home.dart';
-import 'package:chamber_of_commerce/pages/user/Business_Options/Import/Import_Home.dart';
-import 'package:chamber_of_commerce/pages/user/Business_Options/Transport/Transport_Home.dart';
+import 'package:chamber_of_commerce/pages/user/Business_Options/Wholesale/Wholesale_Home.dart';
 import 'package:chamber_of_commerce/pages/user/Company%20_business.dart';
 import 'package:chamber_of_commerce/pages/user/Company.dart';
 import 'package:chamber_of_commerce/pages/user/Company_detail.dart';
 import 'package:chamber_of_commerce/pages/user/Home.dart';
 import 'package:chamber_of_commerce/widgets/BottomNavBar.dart';
+import 'package:chamber_of_commerce/widgets/ContactTemplete.dart';
 import 'package:chamber_of_commerce/widgets/CustomBottomNavBar.dart';
 import 'package:chamber_of_commerce/widgets/GridScreen.dart';
 import 'package:chamber_of_commerce/widgets/GridSingle.dart';
@@ -26,46 +26,24 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
-class Transport_listing extends StatefulWidget {
+class Wholesale_listing extends StatefulWidget {
   final int index;
   final String title;
   final List<Map<String, String>> businessCompanyProfile ;
-  const Transport_listing({super.key,required this.index,required this.title,required this.businessCompanyProfile});
+  const Wholesale_listing({super.key,required this.index,required this.title,required this.businessCompanyProfile});
   @override
-  State<Transport_listing> createState() => _Transport_listingState();
+  State<Wholesale_listing> createState() => _Wholesale_listingState();
 }
 
-class _Transport_listingState extends State<Transport_listing> {
-   Stream<List<dynamic>>? _userStream;
+class _Wholesale_listingState extends State<Wholesale_listing> {
+   Stream<DatabaseEvent>? _userStream;
   // final Map data = widget.businessCompanyProfile[""];
-
-  List<dynamic> _mapSnapshotToCompanyList(DataSnapshot snapshot) {
-    // Handle both Map and List data structures
-    if (snapshot.value is Map) {
-      final Map<dynamic, dynamic> entries = Map.from(snapshot.value as Map);
-      final List<dynamic> companies = [];
-      entries.forEach((key, value) {
-        companies.add(value);
-      });
-      return companies;
-    } else if (snapshot.value is List) {
-      return snapshot.value as List<dynamic>; // Assuming each item in the list represents a company
-    } else {
-      print('Unexpected data type received: ${snapshot.value}');
-      return []; // Empty list if unexpected data type
-    }
-  }  
+   
   @override
   void initState() {
     super.initState();
     try {
-    _userStream = FirebaseDatabase.instance.ref('Query10')
-    .orderByChild('Sector')
-
-             .startAt("TRANSPORT, STORAGE AND COMMUNICATION")
-            .endAt("TRANSPORT, STORAGE AND COMMUNICATION" + '\uffff')
-    .onValue
-   .map((event) => _mapSnapshotToCompanyList(event.snapshot));
+    _userStream = FirebaseDatabase.instance.ref('Query10').onValue;
   } on FirebaseException catch (e) {
     print('Firebase error: ${e.code} - ${e.message}');
     // Handle the error appropriately, potentially display a user-friendly message
@@ -130,7 +108,7 @@ class _Transport_listingState extends State<Transport_listing> {
                       context,
                        TransparentRoute(
                
-                page:   Transport_Home(),
+                page:  const Wholesale_Home(),
               ),
                     ),
                     }
@@ -178,7 +156,7 @@ class _Transport_listingState extends State<Transport_listing> {
         children: [
           
        
-              StreamBuilder<List<dynamic>>(builder:  (context, snapshot) {
+              StreamBuilder<DatabaseEvent>(builder:  (context, snapshot) {
                        return Column(
                          children: [
                   //          const SizedBox(
@@ -218,7 +196,7 @@ class _Transport_listingState extends State<Transport_listing> {
   ///
   ///
   
-    Widget _buildContent(AsyncSnapshot<List<dynamic>> snapshot) {
+    Widget _buildContent(AsyncSnapshot<DatabaseEvent> snapshot) {
     //  print(snapshot.data!.snapshot.value as List<dynamic>);
       if (snapshot.hasError) {
     return Center(
@@ -230,13 +208,12 @@ class _Transport_listingState extends State<Transport_listing> {
     return const Center(child: CircularProgressIndicator());
   }
   //  print(snapshot.data);
-  final all_data = snapshot.data! as List<dynamic>;
-  final data = all_data;
-  // .expand((element) {
-  //   // ... filtering logic using entry.value as Map<String, dynamic>
-  //   final companyName = element['Sector']?.toString() ?? '';
-  //   return companyName.startsWith("AGRICULTURE, HUNTING, FORESTRY, AND FISHING") ? [element] : [];
-  // }).toList();
+  final all_data = snapshot.data!.snapshot.value as List<dynamic>;
+  final data = all_data.expand((element) {
+    // ... filtering logic using entry.value as Map<String, dynamic>
+    final companyName = element['Sector']?.toString() ?? '';
+    return companyName.startsWith("WHOLESALE AND RETAIL") ? [element] : [];
+  }).toList();
   // print(data);
   List<dynamic> filteredBusinesses = data;
   if (data.isEmpty) {
@@ -244,58 +221,264 @@ class _Transport_listingState extends State<Transport_listing> {
   }
   //based on the index categorize SIT+A1:I15802C Description
   var items = [
- "ABROAD RECRUITMENT AND LINKAGE ACTIVITIES",
-"ACTIVITIES OF AIR TRANSPORT" ,
-"BROKER IN VEHICLES RENTING AND SAILING" ,
-"COMMISSION/BROKERS BUSINESS ACTIVITIES" ,
-"CONSTRUCTION MATERIALS, HARDWARE, PLUMBING" ,
-"COURIER ACTIVITIES OTHER THAN NATIONAL POSTAL ACTIVITIES" ,
-"CROSS-COUNTRY PUBLIC TRANSPORT" ,
-"CUSTOMS CLEARANCE" ,
-"EVENT ORGANIZERS" ,
-"FREIGHT FORWARDERS" ,
-"FREIGHT FORWARDERS AND HARBOUR WORKS" ,
-"FREIGHT TRANSPORT BY CONTAINER" ,
-"GROUND HANDLING" ,
-"HOUSHOLDS INCLUDING MATTRESSES,CUSHIONS,BLANKETS ETC" ,
-"INTER-URBAN RAILWAY TRANSPORT" ,
-"LAND TRANSPORT AND RELATED SERVICES" ,
-"LIQUID FREIGHT TRANSPORT SERVICE" ,
-"LOCAL LABOR RECRUTMENT AND LINKAGE ACTIVITIES" ,
-"Operation of roads and toll roads" ,
-"OTHER FREIGHT TRANSPORT BY ROAD" ,
-"Other passenger transport, including the renting of passenger motor vehicles with drivers ." ,
-"OTHER POSTAL AND RELATED COURIER ACTIVITIES" ,
-"Parking garages and parking lots" ,
-"RENTING OF LAND TRANSPORT ( CAR) EQUIPMENT" ,
+    "SAND,GRAVEL STONE AND RELATED MATERIALS" ,
+"FLORA FOAM" ,
+"SUPER MARKET" ,
+"FRESH FRUITS & VEGETABLES" ,
+"PEPPER & SPICES" ,
+"WHOLESALE TRADE" ,
+"HOUSEHOLD FURNITURE APPLIANCES, ARTICLES AND EQUIPMENT" ,
+"ELECTRICAL EQUIPMENT" ,
+"COFFEE" ,
+"SHOES" ,
+"ELECTRIC MITAD AND MAINTENANCE" ,
+"LEATHER PRODUCTS" ,
+"HARD WARE AND COMPUTER ACCESSORIES /MAINTENANCE" ,
+"GARMENT AND RELATED" ,
+"HOUSE HOLD AND OFFICE FURNISHINGS AND DECORATIVE (CURTAIN, CARPET AND WALL PAPER)" ,
+"BOOKS AND STATIONARY MATERIALS" ,
+"AUTOMOTIVE FUEL & LUBRICANTS IN GAS STATION /CAR WASH SERVICE" ,
+"SALE OF TYRES" ,
+"SMALL SHOP" ,
+"BAKERY PRODUCTS" ,
+"SOUVENIRS,ARTIFACT AND ARTIFICIAL JEWELRY/ TRADITIONAL WEAR" ,
+"PHOTOGRAPHIC AND OPTICAL INSTRUMENTS" ,
+"BEVERAGES" ,
+"OFFICE MACHINES AND EQUIPMENT(INCLUDING ACCESSORIES)" ,
+"CONSTRUCTION EQUIPMENT MACHINERIES AND ACCESSORIES" ,
+"COMPUTER AND COMPUTER ACCESSORIES AND PERIPHERAL EQUIPMENT" ,
+"SOFT DRINKS" ,
+"HUMAN HEALTH MEDICAL SUPPLIES AND EQUIPMENTS" ,
+"CEMENTS" ,
+"CEREALS" ,
+"PHARMACEUTICAL AND MEDICAL GOODS, COSMETIC AND TOILET ARTICLES" ,
+"MEDICAL EQUIPMENTS, PHARMACEUTICAL, COSMETICS, PERFUMERY AND SANITARY ARTICLES" ,
+"SANITARYWARE AND COSMOTICS" ,
+"JEWELLERY, WATCHES AND CLOCKS" ,
+"SECURITY AND FIRE FIGHTING EQUIPMENT" ,
+"Retail trade in reading matter and stationery" ,
+"CONFECTIONERY INCLUDING COCOA AND CHOCOLATE" ,
+"MEAT & MEAT PRODUCTS ,POULTRY" ,
+"MINI MARKET/ SHOP" ,
+"GRAIN MILLS MACHINERY AND ITS SPARE PARTS" ,
+"CRUDE RUBBER" ,
+"HYPER MARKET" ,
+"TRADITIONAL WEAR" ,
+"CONSTRUCTION MATERIALS" ,
+"SALES OF NEW PARTS AND ACCESSORIES" ,
+"SPORTS GOODS AND ENTERTAINMENT REQUISITES" ,
+"CROCKERY, CUTLERY AND KITCHEN UTENSILS" ,
+"INCENSE & GUMS" ,
+"INDUSTRIAL MACHINERY AND EQUIPMENT" ,
+"MEDICINES" ,
+"VETERINARY DRUGS, MEDICINES AND EQUIPMENTS" ,
+"SOLID,LIQUID AND GASEOUS FUELS AND RELATED PRODUCTS" ,
+"APPAREL AND CLOTHING" ,
+"COSMETICS ,ESSENTIAL OILS AND RESINOUS ,PERFUME AND CHEMICALS FOR PERFUMES" ,
+"RETAIL TRADE OF FOOT WEAR, LEATHER AND RELATED PRODUCTS" ,
+"PLASTICS IN PRIMARY FORMS AND NON-PRIMARY FORMS" ,
+"CHEMICALS FOR AGRICULTURAL USE" ,
+"CHEMICALS FOR INDUSTRIAL USE" ,
+"FABRICATED METALS EXCEPT GENERAL HARD WARE(EG STEEL PIPES)" ,
+"PLASTIC PRODUCTS" ,
 "RETAIL TRADE OF VEHICLES" ,
-"SALVAGING OF DISTRESSED VESSELS AND CARGOS" ,
-"SECURITY AND CLEANING SERVICE" ,
-"SHIP AGENTS" ,
-"SPECIAL EVENT ORAGANIZTION ACTIVITIES" ,
-"STORAGE AND WAREHOUSING" ,
-"TAXIS" ,
-"TELECOMMUNICATION" ,
-"TELECOMMUNICATION TERMINAL EQUIPMENTS MAINTENANCE" ,
-"TELECOMMUNICATION VALUE ADDED SERVICE" ,
-"TELECOMMUNICATION VALUE ADDED SERVICES" ,
-"TOUR OPERATORS" ,
-"TOURISM PROMOTION" ,
-"Trade Promotion Service" ,
-"TRANSPORT AGENCIES" ,
-"TRANSPORT OF CARGO TRUCKS" ,
-"TRANSPORT OF CONSTRUCTION MATERIALS" ,
-"TRANSPORT OF DIFFERENT CAR BY CRANES OR PULLING OR LOADING" ,
-"TRANSPORT OF FUEL" ,
-"TRANSPORT SERVICE BY ROAD AND DRY FREIGHT" ,
-"TRAVEL AGENCY REPRESENTATION AND ONLINE TRAVEL AGENCY ACTIVITY" ,
-"TRAVEL AGENT" ,
-"URBAN, SUB URBAN AND INTER-URBAN BUS AND COACH PASSENGER LINES" ,
+"VEHICLES ACCESSORIES AND DECOR" ,
+"AGRICULTURAL RAW MATERIALS" ,
+"BOTTLED WATER" ,
+"RUBBER AND RUBBER PRODUCTS" ,
+"ANIMAL FEED" ,
+"GAS, NATURAL AND MANUFACTURED" ,
+"PROFESSIONAL SCIENTIFIC, CONTROLLING AND PRECISION EQUIPMENT" ,
+"BASIC INDUSTRIAL CHEMICALS EXCEPT FERTILIZERS" ,
+"COFFEE AND TEA" ,
+"BROKER IN VEHICLES RENTING AND SAILING" ,
+"PLASTICS IN NON-PRIMARY FORMS" ,
+"SOAPS, DETERGENTS, TOILETRIES, CHEMICALS FOR CLEANSING, POLISHING AND CLEANSING" ,
+"GENERAL HARDWARE" ,
+"MOTOR CYCLE, BICYCLE AND TRI CYCLE (BAJAJ) PARTS AND ACCESSORIES" ,
+"TYRES AND CAR BATTERIES" ,
+"PETROLEUM, PETROLEUM PRODUCTS& RELATED MATERIALS" ,
+"FUEL & LUBRICANTS OUT SIDE GAS STATION" ,
+"FURNITURE, HOME AND OFFICE FURNISHINGS AND HOUSEHOLD AND OFFICE EQUIPMENT" ,
+"HOUSEHOLD AND OFFICE FURNITURE, REQUZITE, BOARDS, APPLIANCES" ,
+"Retail trade of construction equipment (e.g. concrete mixer)" ,
+"TEXTILES AND LEATHER GOODS" ,
+"COTTON, TEXTILE FIBERS,YARN, TEXTILES AND TEXTILES CLOTHING" ,
+"BEVERAGE CROPS" ,
+"LIGHTING AND LIGHTING ACCESSORIES" ,
+"CONSTRUCTION MATERIALS HARDWARE, PLUMBING AND HEATING EQUIPMENT AND SUPPLIES" ,
+"STATIONERY" ,
+"RETAIL TRADE IN FOOD PRODUCTS" ,
+"WOOL, HIDES, SKINS AND FEATHERS" ,
+"CUT FLOWERS AND PLANTS" ,
+"WHOLESALE TRADE IN STATIONERIES,PAPER AND PAPER PRODUCTS" ,
+"AGRICULTURAL MACHINERY AND EQUIPMENT" ,
+"ELECTRICITY DISTRIBUTION AND CONTROL APPARATUS" ,
+"SOLAR ENERGY EQUIPMENTS" ,
+"WIRING AND CABLES ACCESSORIES" ,
+"PAPER AND PAPER PRODUCTS" ,
+"AUTOMOTIVE FUEL AND LUBRICANTS" ,
+"INDUSTRIAL,AGRICULTURAL AND CONSTRUCTION MACHINERY AND EQUIPMENTS" ,
+"BROADCASTING EQUIPMENTS" ,
+"FURNISHINGS (INCLUDING CURTAINS, CARPETS, WALL PAPER)/SANITARY TOOLS /BROOM," ,
+"TELECOMMUNICATIONS EQUIPMENT" ,
+"STRUCTURAL CLAY AND CONCRETE PRODUCTS(EG MOSAIC TILES, BRICKS)" ,
+"BROKERS DUTIES" ,
+"CAR DECOR" ,
+"LADIES' AND GIRLS' CLOTHING" ,
+"MENS LADIES AND BOYS CLOTHING" ,
+"RETAIL TRADE IN BEVERAGE PRODUCTS" ,
+"PRECIOUS STONES, JEWELERY AND SILVERWARE" ,
+"EDUCATION EQUIPMENTS" ,
+"LOGS,TIMBER AND FOREST PRODUCTS" ,
+"CHEMICALS" ,
+"AGRICULTURAL PRODUCTS" ,
+"BAGS, LUGGAGE’S AND RELATED PRODUCTS" ,
+"CHILDREN CLOTHING" ,
+"HOUSEHOLD GOODS" ,
+"FOOT WEAR AND LETHER GOODS" ,
+"PAINTS (INCLUDING VARNISHES AND SUPPLIES)" ,
+"SAWN,FIBER, PLYWOOD AND RELATED PRODUCTS" ,
+"HOUSE MADE FOOD PRODUCT" ,
+"PESTICIDES AND HERBICIDES" ,
+"SAWN TIMBER , PLYWOOD AND RELATED PRODUCTS" ,
+"PAGERS, HAND PHONES AND TELECOMMUNICATIONS APPARATUS (EGPALMTOPS, SMART WATCHES, WEARABLE COMPUTER AND ELECTRONIC BOOKS)" ,
+"TELECOMMUNICATION EQUIPMENTS/ACCESSORIES/SALES/MAINTENANCE" ,
+"COSMOTICS,PERFUMERY AND SANITARYARTICLES" ,
+"COMMUNICATION DEVICE" ,
+"VEHICLES SPARE PARTS AND ARTIFICIAL JEWLERY/DECOR" ,
+"RETAIL TRADE IN OUTSIDE STORES" ,
+"WHOLESALE TRADE IN HOUSEHOLD ELECTRICAL APPLIANCES AND EQUIPMENT (INCLUDING HOUSEHOLD AIR-CONDITIONERS)" ,
+"HOUSE HOLD FURNITURE(BLANKET, BED SHEET, QUILT AND PILLOW)" ,
+"TEXTILE FIBERS, COTTON, YARN AND APPAREL" ,
+"PESTICIDES AND AGRO-CHEMICAL PRODUCTS" ,
+"LIVESTOCK PRODUCTS" ,
+"FRUITS & VEGETABLES" ,
+"OTHER WHOLESALE TRADE" ,
+"SUGAR" ,
+"UNFINISHED NON AGRICULTURAL INTERMEDIATE INDUSTRIAL PRODUCTS,WASTE AND SCRAP PRODUCTS" ,
+"RETAIL TRADE OF HOUSE MADE FOOD PRODUCT" ,
+"PROCESSED COFFEE" ,
+"LOGS AND TIMBER" ,
+"WHOLESALE OF GENERAL HARDWARE" ,
+"FOOTWEAR AND LEATHER GOODS" ,
+"CHEMICALS AND CHEMICAL PRODUCTS" ,
+"OILSEEDS" ,
+"PULSES" ,
+"RECORDED CD’S, VCD’S AND RELATED PRODUCTS" ,
+"RUBBER,PLASTICS AND PLASTIC PRODUCTS" ,
+"KEROSIN AND LUBRICANTS (WITHOUT FUEL STATIONS" ,
+"SPORTSWEAR AND FOOTWEAR" ,
+"VEHICLE SPARE PARTS" ,
+"METAL ,NON METALS, METAL ORES AND SCRAPS" ,
+"MUSICAL INSTRUMENTS AND SCORES(FILM, THEATER AND RELATED INSTRUMENTS)" ,
+"OTHER BROKERS (INTERMEDIARY)DUTIES" ,
+"TOYS AND GAMES" ,
+"SPORTING GOODS AND EQUIPMENT" ,
+"WATER WORKS CONTRACTOR" ,
+"PERFUMES, COSMETICS ,ESSENTIAL OILS AND RESINOUS" ,
+"SHOES AND LEATHER GOODS" ,
+"FOOT WEAR" ,
+"ELECTRICAL EQUIPMENTS AND APPLIANCES" ,
+"PHOTO GRAPHICS AND VISUAL EQUIPMENTS" ,
+"PLANT SEED" ,
+"COMMUNICATION, COMPUTER AND RELATED EQUIPMENT" ,
+"LABORATORY EQUIPMENTS" ,
+"IRON AND STEEL" ,
+"INSTALLATION OF ELECTRIC LINE" ,
+"DISTRIBUTION AND SALES OF ELECTRICITY" ,
+"ELECTRICITY,GAS,STEAM AND HOT WATER SUPPLY" ,
+"DRY WASTE REMOVING" ,
+"GENERATION OF ELECTRIC ENERGY FROM RENEWABLE SOURCES" ,
+"BUILDING WORKS CONTRACTOR" ,
+"GENERAL CONTRACTOR" ,
+"CONSTRUCTION OF WATER WORKS" ,
+"SPRAYING OF PESTICIDES FOR HOUSHOLD PURPOSES" ,
+"SPINNING, WEAVING AND FINISHING OF TEXTILES" ,
+"GRAIN MILL SERVICE" ,
+"DIFFERENT EVENTS DECORATING ACTIVITIES" ,
+"CLINICS AND RELATED HEALTH CARE SERVICES" ,
+"CONSULTANCY SERVICE FOR ECONOMIC DEVELOPMENT" ,
+"SHORT TERM TCHNICAL EDUCATION AND TRAINING" ,
+"DECORATING ACTIVITIES" ,
+"LADIES HAIR DRESSING SERVICE" ,
+"MIDDLE CLINIC SERVICE" ,
+"PRINTING" ,
+"MOTION PICTURE, THEATRE AND VIDEO PRODUCTION AND DISTRIBUTION" ,
+"FILM PRODUCTION" ,
+"SERVICE OF REGULAR HIGHER EDUCATION" ,
+"SPORTING AND RECREATIONAL ACTIVITIES" ,
+"CONSULTANCY ACTIVITY ON ADVERTISING" ,
+"NEWSPAPERS, JOURNALS AND PERIODICALS DISTRIBUTER" ,
+"MANAGEMENT CONSULTANCY SERVICES" ,
+"QUALITY MANAGEMENT SYSTEM CONSULTANCY" ,
+"SERVICE OF PRE-PRIMARY EDUCATION AND AFTER SCHOOL" ,
+"MEDIA PROGRAM PREPARATION BY AIR TIME RENT" ,
+"EDUCATION BY TECHNICAL COLLEGES AND TECHNICAL INSTITUTIONS" ,
+"CHILD DAY CARE SERVICE" ,
+"EDUCATION RELATED SERVICES" ,
+"TAILORING" ,
+"LAUNDRY SERVICE" ,
+"FILM PRODUCTION, CINEMA HAL, FILM STUDIO AND FILM CAPTURING" ,
+"EDUCATION BY TECHNIQUES AND TRANING" ,
+"MENS AND LADIES HAIRDRESSING" ,
+"RESTAURANTS" ,
+"PICTURE, SCULPTURE,GALLERY/ STUDIO SERVICE" ,
+"DRIVING EDUCATION" ,
+"TRANSLATION & SECRETARIAL SERVICES" ,
+"INTERNET CAFÉ" ,
+"Men's hairdressing service" ,
+"MEDIA ENTERTAINMENT PRODUCTION AND DISTRIBUTION" ,
+"TRADITIONAL MEDICAL SERVICE" ,
+"MUSIC AND BAND ACTIVITIES" ,
+"CUSTOMS CLEARANCE" ,
+"SERVICE OF PRIMARY AND SECONDARY EDUCATION" ,
+"DIAGNOSTIC LABORATORY" ,
+"TOPOGRAPHIC BEAUTY" ,
+"STUDIO RECORDING SERVICE" ,
+"GENERAL HOSPITAL" ,
+"COMMISSION/BROKERS BUSINESS ACTIVITIES" ,
+"POULTRY" ,
+"FLOURICULTURE" ,
+"FLORICULTURE" ,
+"GROWING OF HERBS AND OTHERS" ,
+"CATTLE AND PACK ANIMALS HUSBANDARY" ,
+"TEA AND BEVERAGE ,SPICE CROPS, MEDICINAL AND AROMATIC CROPS FARMING" ,
+"GROWING OF CROPS COMBINED WITH FARMING OF ANIMALS (MIXED FARMING)" ,
+"CEREALS/PULSES FARMING" ,
+"DIFFERENT SEEDLINGS FARMING" ,
+"OIL SEEDS FARMING" ,
+"PEST CONTROL" ,
+"FRUITS FARMING" ,
+"VEGETABLES FARMING" ,
+"VEGETABLE,FRUIT,PLANT AND PLANT SEED PRODUCTION" ,
+"GROWING OF CEREALS" ,
+"BEE KEEPING" ,
+"FISH HATCHERIES AND FISH FARMS" ,
+"Farming of cattle, sheep, goats, horses, asses, mules and hinnies; dairy farming" ,
+"COFFEE FARMING" ,
+"LEATHER, LEATHER PRODUCTS, FOOTWEAR AND RELATED PRODUCTS" ,
+"METAL AND NON METAL SCRAPS" ,
+"RUBBER, PLASTICS AND PLASTIC PRODUCTSAND BATTERIES" ,
+"STATIONARY MATERIALS, PAPER AND PAPER PRODUCTS" ,
+"TEXTILE FIBER,COTTON,THREAD AND APPAREL" ,
+"IMPORTING OF VEHICLES" ,
+"IMPORTING OF VEHICLES SPARE PARTS,REGULATORY EQUIPMENTS AND JEWELRY/DECOR SUPPLIES" ,
+"NEW MOTOR VEHICLES" ,
+"PETROCHEMICAL/VASELINE, GRYCYLINE ETC/ PRODUCTS" ,
+"INDUSTRIAL MACHINERY , EQUIPMENT AND ITS SPARE PARTS" ,
+"USED MOTOR VEHICLES" ,
+"CONSTRUCTION MATERIALS, HARDWARE, PLUMBING" ,
+"PAINTS (INCLUDING VARNISHES,ADEHASIVE,GLUES AND SUPPLIES)" ,
+"STRUCTURAL CLAY AND CONCRETE PRODUCTS" ,
+"IMPORT TRADE IN CHEMICALS FOR AGRICULTURAL INPUT" ,
+"BASIC INDUSTRIAL CHEMICALS" ,
+"IMPORT TRADE IN MATERIAL METAL AND NON METAL SCRAPS" ,
+"FOOD PRODUCTS" ,
 ];
-
 // print(items);
+items.sort((a,b)=>a.compareTo(b));
 // for (var i = 0; i < items.length; i++) {
- items.sort((a,b)=>a.compareTo(b));
   var currentItem =  items[widget.index];
   // console.log(`
   // if(widget.index == i){
@@ -306,7 +489,7 @@ class _Transport_listingState extends State<Transport_listing> {
       final company = element['Sub-Sector']?.toString() ?? '';
       return company.startsWith("${currentItem}") ? [element] : [];
     }).toList();
-  // print(i);ite
+//   print(i);
 //   }
 
 // }
@@ -383,7 +566,7 @@ class _Transport_listingState extends State<Transport_listing> {
                          // Column(children: [
                          //   SvgPicture.asset('assets/images/phone_icon.svg'),
                          //   SizedBox(height: 10,),
-                         // //  SvgPicture.asset('assets/images/fax_icon.svg')
+                         // //  SvgPicture.asset('assets/images/mobile_icon.svg')
                             
                          // ],),
                          // SizedBox(width: 20,),
@@ -400,102 +583,103 @@ class _Transport_listingState extends State<Transport_listing> {
                          
                      //   ],
                      // ),
-                     if(tel !="")
-                     Row(
-                       children: [
-                         InkWell( // Wrap the content in an InkWell
-                 onTap: () {
-                   launch('tel:$tel'); // Launch the phone dialer with the number
-                 },
-                        child: Row(
-                           children: [
-                              Container(
-                               // width: 20,
-                               // height: 20,
-                               decoration: BoxDecoration(
+                //      if(tel !="")
+                //      Row(
+                //        children: [
+                //          InkWell( // Wrap the content in an InkWell
+                //  onTap: () {
+                //    launch('tel:$tel'); // Launch the phone dialer with the number
+                //  },
+                //         child: Row(
+                //            children: [
+                //               Container(
+                //                // width: 20,
+                //                // height: 20,
+                //                decoration: BoxDecoration(
                      
-                         color: Color.fromARGB(255, 255, 255, 255),
+                //          color: Color.fromARGB(255, 255, 255, 255),
                  
-                 borderRadius:BorderRadius.circular(999), // Set border width
+                //  borderRadius:BorderRadius.circular(999), // Set border width
                  
-                   ),
-                               child: SvgPicture.asset('assets/images/vector1.svg',width: 10,height: 10,)),
-                             SizedBox(width: 10,),
-                             Text(tel,softWrap: true,overflow: TextOverflow.ellipsis,),
-                           ],
-                         ),),
-                       ],
-                     ),
-                     SizedBox(height: 5,),
+                //    ),
+                //                child: SvgPicture.asset('assets/images/vector1.svg',width: 10,height: 10,)),
+                //              SizedBox(width: 10,),
+                //              Text(tel,softWrap: true,overflow: TextOverflow.ellipsis,),
+                //            ],
+                //          ),),
+                //        ],
+                //      ),
+                //      SizedBox(height: 5,),
                     
-                      if(website !="")
-                     Row(
-                     children: [
-                      InkWell( // Wrap the content in an InkWell
-                         onTap: () {
-                           launch(website); // Launch the URL in a web browser
-                 },
-                       child:Row(
-                       children: [
-                          Container(
-                           // width: 20,
-                           // height: 20,
-                           decoration: BoxDecoration(
+                //       if(website !="")
+                //      Row(
+                //      children: [
+                //       InkWell( // Wrap the content in an InkWell
+                //          onTap: () {
+                //            launch(website); // Launch the URL in a web browser
+                //  },
+                //        child:Row(
+                //        children: [
+                //           Container(
+                //            // width: 20,
+                //            // height: 20,
+                //            decoration: BoxDecoration(
                      
-                         color: Color.fromARGB(255, 255, 255, 255),
+                //          color: Color.fromARGB(255, 255, 255, 255),
                  
-                 borderRadius:BorderRadius.circular(999), // Set border width
+                //  borderRadius:BorderRadius.circular(999), // Set border width
                  
-                   ),
-                           child: SvgPicture.asset('assets/images/vector.svg',width: 10,height: 10,)),
-                         SizedBox(width: 10,),
-                         Text(website,softWrap: true,overflow: TextOverflow.ellipsis,),
-                       ],
-                     )),],),
-                      SizedBox(height: 5,),
-                      if(mobile !="")
-                     Row(
-                       children: [
-                          Container(
-                           // width: 10,
-                           // height: 10,
-                           decoration: BoxDecoration(
+                //    ),
+                //            child: SvgPicture.asset('assets/images/vector.svg',width: 10,height: 10,)),
+                //          SizedBox(width: 10,),
+                //          Text(website,softWrap: true,overflow: TextOverflow.ellipsis,),
+                //        ],
+                //      )),],),
+                //       SizedBox(height: 5,),
+                //       if(mobile !="")
+                //      Row(
+                //        children: [
+                //           Container(
+                //            // width: 10,
+                //            // height: 10,
+                //            decoration: BoxDecoration(
                      
-                         color: Color.fromARGB(255, 255, 255, 255),
+                //          color: Color.fromARGB(255, 255, 255, 255),
                  
-                 borderRadius:BorderRadius.circular(999), // Set border width
+                //  borderRadius:BorderRadius.circular(999), // Set border width
                  
-                   ),
-                           child: SvgPicture.asset('assets/images/vector3.svg',width: 10,height: 10,)),
-                         SizedBox(width: 10,),
-                         Text(mobile,softWrap: true,overflow: TextOverflow.ellipsis,),
-                       ],
-                     ),
-                      SizedBox(height: 5,),
-                       if(email !="")
-                     Row(
-                   children: [
-                     InkWell( // Wrap the content in an InkWell
-                 onTap: () {
-                   launch('mailto:$email'); // Launch email app with recipient
-                 },
-                 child: Row(
-                       children: [
-                          Container(
-                           // width: 20,
-                           // height: 20,
-                           decoration: BoxDecoration(
+                //    ),
+                //            child: SvgPicture.asset('assets/images/vector3.svg',width: 10,height: 10,)),
+                //          SizedBox(width: 10,),
+                //          Text(mobile,softWrap: true,overflow: TextOverflow.ellipsis,),
+                //        ],
+                //      ),
+                //       SizedBox(height: 5,),
+                //        if(email !="")
+                //      Row(
+                //    children: [
+                //      InkWell( // Wrap the content in an InkWell
+                //  onTap: () {
+                //    launch('mailto:$email'); // Launch email app with recipient
+                //  },
+                //  child: Row(
+                //        children: [
+                //           Container(
+                //            // width: 20,
+                //            // height: 20,
+                //            decoration: BoxDecoration(
                      
-                         color: Color.fromARGB(255, 255, 255, 255),
+                //          color: Color.fromARGB(255, 255, 255, 255),
                  
-                 borderRadius:BorderRadius.circular(999), // Set border width
+                //  borderRadius:BorderRadius.circular(999), // Set border width
                  
-                   ),
-                           child: SvgPicture.asset('assets/images/vector2.svg',width: 10,height: 10,)),
-                          SizedBox(width: 10,),
-                         Text(email,softWrap: true,overflow: TextOverflow.ellipsis,),
-                       ],
-                     ),)]),
+                //    ),
+                //            child: SvgPicture.asset('assets/images/vector2.svg',width: 10,height: 10,)),
+                //           SizedBox(width: 10,),
+                //          Text(email,softWrap: true,overflow: TextOverflow.ellipsis,),
+                //        ],
+                //      ),)]),
+                 ContactTemeplete(tel: tel,mobile: mobile,email: email, website: website,),
                       SizedBox(height: 5,),
                      Text('Sector: $sector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
                      SizedBox(height: 5,),
@@ -519,7 +703,7 @@ class _Transport_listingState extends State<Transport_listing> {
                 //              icon: const Icon(Icons.share),
                 //              onPressed: () async {
                 //                // Replace with your actual sharing logic
-                //                final text = 'Company Name: $name\n Phone: $tel\n Email: $email\n Website: $website\n Fax: $mobile\n';
+                //                final text = 'Company Name: $name\n Phone: $tel\n Email: $email\n Website: $website\n mobile: $mobile\n';
                 //                await Share.share(text);
                 //              },
                 //                       ),

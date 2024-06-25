@@ -43,32 +43,35 @@ class _ExpandedPanelUsefullAddressState extends State<ExpandedPanelUsefullAddres
       title: Text(currentCategory, style: const TextStyle(color: Colors.black)),
       children: [
         if (matchingData.isNotEmpty) // Check if there's matching data
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: matchingData.length,
-            itemBuilder: (_, ind) {
-              final item = matchingData[ind];
-              return Card(
-                color: const Color.fromARGB(255, 229, 234, 232),
-                child: ExpansionTile(
-                  collapsedShape: const RoundedRectangleBorder(side: BorderSide.none),
-                  shape: const RoundedRectangleBorder(side: BorderSide.none),
-                  title: Text(item['title'], style: const TextStyle(color: Colors.black)),
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      color: Colors.white,
-                      child: Column(
-                        children: [
-                          ContactTemeplete(tel: item['tel'],),
-                          // Add other information from the item here
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              );
-            },
+          SingleChildScrollView(
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: matchingData.length,
+              itemBuilder: (_, ind) {
+                final item = matchingData[ind];
+                return Card(
+                        color: const Color.fromARGB(255, 229, 234, 232),
+                        child: ExpansionTile(
+                          collapsedShape: const RoundedRectangleBorder(side: BorderSide.none),
+                          shape: const RoundedRectangleBorder(side: BorderSide.none),
+                          title: Text(item['title'], style: const TextStyle(color: Colors.black)),
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              color: Colors.white,
+                              child:Column(
+                          children: [
+                            ContactTemeplete(tel: item['tel'],),
+                            // Add other information from the item here
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
       ],
     );

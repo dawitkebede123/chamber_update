@@ -3,13 +3,13 @@ import 'package:chamber_of_commerce/main.dart';
 import 'package:chamber_of_commerce/pages/user/Business.dart';
 import 'package:chamber_of_commerce/pages/user/Business_Options/Agriculture/Agriculture_Home.dart';
 import 'package:chamber_of_commerce/pages/user/Business_Options/Export/Export_Home.dart';
+import 'package:chamber_of_commerce/pages/user/Business_Options/Import/Import_Home.dart';
 import 'package:chamber_of_commerce/pages/user/Business_Options/Wholesale/Wholesale_Home.dart';
 import 'package:chamber_of_commerce/pages/user/Company%20_business.dart';
 import 'package:chamber_of_commerce/pages/user/Company.dart';
 import 'package:chamber_of_commerce/pages/user/Company_detail.dart';
 import 'package:chamber_of_commerce/pages/user/Home.dart';
 import 'package:chamber_of_commerce/widgets/BottomNavBar.dart';
-import 'package:chamber_of_commerce/widgets/ContactTemplete.dart';
 import 'package:chamber_of_commerce/widgets/CustomBottomNavBar.dart';
 import 'package:chamber_of_commerce/widgets/GridScreen.dart';
 import 'package:chamber_of_commerce/widgets/GridSingle.dart';
@@ -36,14 +36,36 @@ class Wholesale_listing extends StatefulWidget {
 }
 
 class _Wholesale_listingState extends State<Wholesale_listing> {
-   Stream<DatabaseEvent>? _userStream;
+   Stream<List<dynamic>>? _userStream;
   // final Map data = widget.businessCompanyProfile[""];
-   
+
+  List<dynamic> _mapSnapshotToCompanyList(DataSnapshot snapshot) {
+    // Handle both Map and List data structures
+    if (snapshot.value is Map) {
+      final Map<dynamic, dynamic> entries = Map.from(snapshot.value as Map);
+      final List<dynamic> companies = [];
+      entries.forEach((key, value) {
+        companies.add(value);
+      });
+      return companies;
+    } else if (snapshot.value is List) {
+      return snapshot.value as List<dynamic>; // Assuming each item in the list represents a company
+    } else {
+      print('Unexpected data type received: ${snapshot.value}');
+      return []; // Empty list if unexpected data type
+    }
+  }  
   @override
   void initState() {
     super.initState();
     try {
-    _userStream = FirebaseDatabase.instance.ref('Query10').onValue;
+    _userStream = FirebaseDatabase.instance.ref('Query10')
+    .orderByChild('Sector')
+
+             .startAt("WHOLESALE AND RETAIL")
+            .endAt("WHOLESALE AND RETAIL" + '\uffff')
+    .onValue
+   .map((event) => _mapSnapshotToCompanyList(event.snapshot));
   } on FirebaseException catch (e) {
     print('Firebase error: ${e.code} - ${e.message}');
     // Handle the error appropriately, potentially display a user-friendly message
@@ -108,7 +130,7 @@ class _Wholesale_listingState extends State<Wholesale_listing> {
                       context,
                        TransparentRoute(
                
-                page:  const Wholesale_Home(),
+                page:   Wholesale_Home(),
               ),
                     ),
                     }
@@ -156,7 +178,7 @@ class _Wholesale_listingState extends State<Wholesale_listing> {
         children: [
           
        
-              StreamBuilder<DatabaseEvent>(builder:  (context, snapshot) {
+              StreamBuilder<List<dynamic>>(builder:  (context, snapshot) {
                        return Column(
                          children: [
                   //          const SizedBox(
@@ -196,7 +218,7 @@ class _Wholesale_listingState extends State<Wholesale_listing> {
   ///
   ///
   
-    Widget _buildContent(AsyncSnapshot<DatabaseEvent> snapshot) {
+    Widget _buildContent(AsyncSnapshot<List<dynamic>> snapshot) {
     //  print(snapshot.data!.snapshot.value as List<dynamic>);
       if (snapshot.hasError) {
     return Center(
@@ -208,12 +230,13 @@ class _Wholesale_listingState extends State<Wholesale_listing> {
     return const Center(child: CircularProgressIndicator());
   }
   //  print(snapshot.data);
-  final all_data = snapshot.data!.snapshot.value as List<dynamic>;
-  final data = all_data.expand((element) {
-    // ... filtering logic using entry.value as Map<String, dynamic>
-    final companyName = element['Sector']?.toString() ?? '';
-    return companyName.startsWith("WHOLESALE AND RETAIL") ? [element] : [];
-  }).toList();
+  final all_data = snapshot.data! as List<dynamic>;
+  final data = all_data;
+  // .expand((element) {
+  //   // ... filtering logic using entry.value as Map<String, dynamic>
+  //   final companyName = element['Sector']?.toString() ?? '';
+  //   return companyName.startsWith("AGRICULTURE, HUNTING, FORESTRY, AND FISHING") ? [element] : [];
+  // }).toList();
   // print(data);
   List<dynamic> filteredBusinesses = data;
   if (data.isEmpty) {
@@ -221,7 +244,7 @@ class _Wholesale_listingState extends State<Wholesale_listing> {
   }
   //based on the index categorize SIT+A1:I15802C Description
   var items = [
-    "SAND,GRAVEL STONE AND RELATED MATERIALS" ,
+     "SAND,GRAVEL STONE AND RELATED MATERIALS" ,
 "FLORA FOAM" ,
 "SUPER MARKET" ,
 "FRESH FRUITS & VEGETABLES" ,
@@ -241,7 +264,6 @@ class _Wholesale_listingState extends State<Wholesale_listing> {
 "SALE OF TYRES" ,
 "SMALL SHOP" ,
 "BAKERY PRODUCTS" ,
-// "Sub-Sector" ,
 "SOUVENIRS,ARTIFACT AND ARTIFICIAL JEWELRY/ TRADITIONAL WEAR" ,
 "PHOTOGRAPHIC AND OPTICAL INSTRUMENTS" ,
 "BEVERAGES" ,
@@ -413,7 +435,6 @@ class _Wholesale_listingState extends State<Wholesale_listing> {
 "NEWSPAPERS, JOURNALS AND PERIODICALS DISTRIBUTER" ,
 "MANAGEMENT CONSULTANCY SERVICES" ,
 "QUALITY MANAGEMENT SYSTEM CONSULTANCY" ,
-// "ACTIVITIES OF PROFESSIONAL ORGANIZATIONS" ,
 "SERVICE OF PRE-PRIMARY EDUCATION AND AFTER SCHOOL" ,
 "MEDIA PROGRAM PREPARATION BY AIR TIME RENT" ,
 "EDUCATION BY TECHNICAL COLLEGES AND TECHNICAL INSTITUTIONS" ,
@@ -429,9 +450,7 @@ class _Wholesale_listingState extends State<Wholesale_listing> {
 "DRIVING EDUCATION" ,
 "TRANSLATION & SECRETARIAL SERVICES" ,
 "INTERNET CAFÉ" ,
-// "WASHING AND DRY-CLEANING OF TEXTILES AND FUR PRODUCTS" ,
 "Men's hairdressing service" ,
-// "ARTS FESTIVAL( MUSIC,FILM, THEATRE,GALLERY AND OTHER)" ,
 "MEDIA ENTERTAINMENT PRODUCTION AND DISTRIBUTION" ,
 "TRADITIONAL MEDICAL SERVICE" ,
 "MUSIC AND BAND ACTIVITIES" ,
@@ -441,13 +460,11 @@ class _Wholesale_listingState extends State<Wholesale_listing> {
 "TOPOGRAPHIC BEAUTY" ,
 "STUDIO RECORDING SERVICE" ,
 "GENERAL HOSPITAL" ,
-// "BROAD CAST EQUIPMENTS TELEVISION AND RADIO RECEIVERS, SOUND OR VIDEO RECORDING OR REPRODUCING APPARATUS AND ASSOCIATED GOODS" ,
 "COMMISSION/BROKERS BUSINESS ACTIVITIES" ,
 "POULTRY" ,
 "FLOURICULTURE" ,
 "FLORICULTURE" ,
 "GROWING OF HERBS AND OTHERS" ,
-// "AGRICULTURAL SUPPORT SERVICE" ,
 "CATTLE AND PACK ANIMALS HUSBANDARY" ,
 "TEA AND BEVERAGE ,SPICE CROPS, MEDICINAL AND AROMATIC CROPS FARMING" ,
 "GROWING OF CROPS COMBINED WITH FARMING OF ANIMALS (MIXED FARMING)" ,
@@ -463,7 +480,6 @@ class _Wholesale_listingState extends State<Wholesale_listing> {
 "FISH HATCHERIES AND FISH FARMS" ,
 "Farming of cattle, sheep, goats, horses, asses, mules and hinnies; dairy farming" ,
 "COFFEE FARMING" ,
-// "" ,
 "LEATHER, LEATHER PRODUCTS, FOOTWEAR AND RELATED PRODUCTS" ,
 "METAL AND NON METAL SCRAPS" ,
 "RUBBER, PLASTICS AND PLASTIC PRODUCTSAND BATTERIES" ,
@@ -475,7 +491,6 @@ class _Wholesale_listingState extends State<Wholesale_listing> {
 "PETROCHEMICAL/VASELINE, GRYCYLINE ETC/ PRODUCTS" ,
 "INDUSTRIAL MACHINERY , EQUIPMENT AND ITS SPARE PARTS" ,
 "USED MOTOR VEHICLES" ,
-// "VEHICLES BODIES AND TRAILERS" ,
 "CONSTRUCTION MATERIALS, HARDWARE, PLUMBING" ,
 "PAINTS (INCLUDING VARNISHES,ADEHASIVE,GLUES AND SUPPLIES)" ,
 "STRUCTURAL CLAY AND CONCRETE PRODUCTS" ,
@@ -483,10 +498,12 @@ class _Wholesale_listingState extends State<Wholesale_listing> {
 "BASIC INDUSTRIAL CHEMICALS" ,
 "IMPORT TRADE IN MATERIAL METAL AND NON METAL SCRAPS" ,
 "FOOD PRODUCTS" ,
+
 ];
+
 // print(items);
-items.sort((a,b)=>a.compareTo(b));
 // for (var i = 0; i < items.length; i++) {
+ items.sort((a,b)=>a.compareTo(b));
   var currentItem =  items[widget.index];
   // console.log(`
   // if(widget.index == i){
@@ -497,7 +514,7 @@ items.sort((a,b)=>a.compareTo(b));
       final company = element['Sub-Sector']?.toString() ?? '';
       return company.startsWith("${currentItem}") ? [element] : [];
     }).toList();
-//   print(i);
+  // print(i);ite
 //   }
 
 // }
@@ -574,7 +591,7 @@ items.sort((a,b)=>a.compareTo(b));
                          // Column(children: [
                          //   SvgPicture.asset('assets/images/phone_icon.svg'),
                          //   SizedBox(height: 10,),
-                         // //  SvgPicture.asset('assets/images/mobile_icon.svg')
+                         // //  SvgPicture.asset('assets/images/fax_icon.svg')
                             
                          // ],),
                          // SizedBox(width: 20,),
@@ -591,103 +608,102 @@ items.sort((a,b)=>a.compareTo(b));
                          
                      //   ],
                      // ),
-                //      if(tel !="")
-                //      Row(
-                //        children: [
-                //          InkWell( // Wrap the content in an InkWell
-                //  onTap: () {
-                //    launch('tel:$tel'); // Launch the phone dialer with the number
-                //  },
-                //         child: Row(
-                //            children: [
-                //               Container(
-                //                // width: 20,
-                //                // height: 20,
-                //                decoration: BoxDecoration(
+                     if(tel !="")
+                     Row(
+                       children: [
+                         InkWell( // Wrap the content in an InkWell
+                 onTap: () {
+                   launch('tel:$tel'); // Launch the phone dialer with the number
+                 },
+                        child: Row(
+                           children: [
+                              Container(
+                               // width: 20,
+                               // height: 20,
+                               decoration: BoxDecoration(
                      
-                //          color: Color.fromARGB(255, 255, 255, 255),
+                         color: Color.fromARGB(255, 255, 255, 255),
                  
-                //  borderRadius:BorderRadius.circular(999), // Set border width
+                 borderRadius:BorderRadius.circular(999), // Set border width
                  
-                //    ),
-                //                child: SvgPicture.asset('assets/images/vector1.svg',width: 10,height: 10,)),
-                //              SizedBox(width: 10,),
-                //              Text(tel,softWrap: true,overflow: TextOverflow.ellipsis,),
-                //            ],
-                //          ),),
-                //        ],
-                //      ),
-                //      SizedBox(height: 5,),
+                   ),
+                               child: SvgPicture.asset('assets/images/vector1.svg',width: 10,height: 10,)),
+                             SizedBox(width: 10,),
+                             Text(tel,softWrap: true,overflow: TextOverflow.ellipsis,),
+                           ],
+                         ),),
+                       ],
+                     ),
+                     SizedBox(height: 5,),
                     
-                //       if(website !="")
-                //      Row(
-                //      children: [
-                //       InkWell( // Wrap the content in an InkWell
-                //          onTap: () {
-                //            launch(website); // Launch the URL in a web browser
-                //  },
-                //        child:Row(
-                //        children: [
-                //           Container(
-                //            // width: 20,
-                //            // height: 20,
-                //            decoration: BoxDecoration(
+                      if(website !="")
+                     Row(
+                     children: [
+                      InkWell( // Wrap the content in an InkWell
+                         onTap: () {
+                           launch(website); // Launch the URL in a web browser
+                 },
+                       child:Row(
+                       children: [
+                          Container(
+                           // width: 20,
+                           // height: 20,
+                           decoration: BoxDecoration(
                      
-                //          color: Color.fromARGB(255, 255, 255, 255),
+                         color: Color.fromARGB(255, 255, 255, 255),
                  
-                //  borderRadius:BorderRadius.circular(999), // Set border width
+                 borderRadius:BorderRadius.circular(999), // Set border width
                  
-                //    ),
-                //            child: SvgPicture.asset('assets/images/vector.svg',width: 10,height: 10,)),
-                //          SizedBox(width: 10,),
-                //          Text(website,softWrap: true,overflow: TextOverflow.ellipsis,),
-                //        ],
-                //      )),],),
-                //       SizedBox(height: 5,),
-                //       if(mobile !="")
-                //      Row(
-                //        children: [
-                //           Container(
-                //            // width: 10,
-                //            // height: 10,
-                //            decoration: BoxDecoration(
+                   ),
+                           child: SvgPicture.asset('assets/images/vector.svg',width: 10,height: 10,)),
+                         SizedBox(width: 10,),
+                         Text(website,softWrap: true,overflow: TextOverflow.ellipsis,),
+                       ],
+                     )),],),
+                      SizedBox(height: 5,),
+                      if(mobile !="")
+                     Row(
+                       children: [
+                          Container(
+                           // width: 10,
+                           // height: 10,
+                           decoration: BoxDecoration(
                      
-                //          color: Color.fromARGB(255, 255, 255, 255),
+                         color: Color.fromARGB(255, 255, 255, 255),
                  
-                //  borderRadius:BorderRadius.circular(999), // Set border width
+                 borderRadius:BorderRadius.circular(999), // Set border width
                  
-                //    ),
-                //            child: SvgPicture.asset('assets/images/vector3.svg',width: 10,height: 10,)),
-                //          SizedBox(width: 10,),
-                //          Text(mobile,softWrap: true,overflow: TextOverflow.ellipsis,),
-                //        ],
-                //      ),
-                //       SizedBox(height: 5,),
-                //        if(email !="")
-                //      Row(
-                //    children: [
-                //      InkWell( // Wrap the content in an InkWell
-                //  onTap: () {
-                //    launch('mailto:$email'); // Launch email app with recipient
-                //  },
-                //  child: Row(
-                //        children: [
-                //           Container(
-                //            // width: 20,
-                //            // height: 20,
-                //            decoration: BoxDecoration(
+                   ),
+                           child: SvgPicture.asset('assets/images/vector3.svg',width: 10,height: 10,)),
+                         SizedBox(width: 10,),
+                         Text(mobile,softWrap: true,overflow: TextOverflow.ellipsis,),
+                       ],
+                     ),
+                      SizedBox(height: 5,),
+                       if(email !="")
+                     Row(
+                   children: [
+                     InkWell( // Wrap the content in an InkWell
+                 onTap: () {
+                   launch('mailto:$email'); // Launch email app with recipient
+                 },
+                 child: Row(
+                       children: [
+                          Container(
+                           // width: 20,
+                           // height: 20,
+                           decoration: BoxDecoration(
                      
-                //          color: Color.fromARGB(255, 255, 255, 255),
+                         color: Color.fromARGB(255, 255, 255, 255),
                  
-                //  borderRadius:BorderRadius.circular(999), // Set border width
+                 borderRadius:BorderRadius.circular(999), // Set border width
                  
-                //    ),
-                //            child: SvgPicture.asset('assets/images/vector2.svg',width: 10,height: 10,)),
-                //           SizedBox(width: 10,),
-                //          Text(email,softWrap: true,overflow: TextOverflow.ellipsis,),
-                //        ],
-                //      ),)]),
-                 ContactTemeplete(tel: tel,mobile: mobile,email: email, website: website,),
+                   ),
+                           child: SvgPicture.asset('assets/images/vector2.svg',width: 10,height: 10,)),
+                          SizedBox(width: 10,),
+                         Text(email,softWrap: true,overflow: TextOverflow.ellipsis,),
+                       ],
+                     ),)]),
                       SizedBox(height: 5,),
                      Text('Sector: $sector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
                      SizedBox(height: 5,),
@@ -711,7 +727,7 @@ items.sort((a,b)=>a.compareTo(b));
                 //              icon: const Icon(Icons.share),
                 //              onPressed: () async {
                 //                // Replace with your actual sharing logic
-                //                final text = 'Company Name: $name\n Phone: $tel\n Email: $email\n Website: $website\n mobile: $mobile\n';
+                //                final text = 'Company Name: $name\n Phone: $tel\n Email: $email\n Website: $website\n Fax: $mobile\n';
                 //                await Share.share(text);
                 //              },
                 //                       ),

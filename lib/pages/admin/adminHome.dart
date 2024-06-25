@@ -34,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     try {
-    _userStream = FirebaseDatabase.instance.ref('Query7').onValue;
+    _userStream = FirebaseDatabase.instance.ref('Query10').onValue;
   } on FirebaseException catch (e) {
     print('Firebase error: ${e.code} - ${e.message}');
     // Handle the error appropriately, potentially display a user-friendly message
@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const AddBusinessPage()),
+                MaterialPageRoute(builder: (context) =>  AddBusinessPage()),
               );
             },
           ), 

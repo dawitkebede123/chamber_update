@@ -3,13 +3,13 @@ import 'package:chamber_of_commerce/main.dart';
 import 'package:chamber_of_commerce/pages/user/Business.dart';
 import 'package:chamber_of_commerce/pages/user/Business_Options/Agriculture/Agriculture_Home.dart';
 import 'package:chamber_of_commerce/pages/user/Business_Options/Export/Export_Home.dart';
-import 'package:chamber_of_commerce/pages/user/Business_Options/Import/Import_Home.dart';
-import 'package:chamber_of_commerce/pages/user/Business_Options/Transport/Transport_Home.dart';
+import 'package:chamber_of_commerce/pages/user/Business_Options/Manufacturing/Manufacturing_Home.dart';
 import 'package:chamber_of_commerce/pages/user/Company%20_business.dart';
 import 'package:chamber_of_commerce/pages/user/Company.dart';
 import 'package:chamber_of_commerce/pages/user/Company_detail.dart';
 import 'package:chamber_of_commerce/pages/user/Home.dart';
 import 'package:chamber_of_commerce/widgets/BottomNavBar.dart';
+import 'package:chamber_of_commerce/widgets/ContactTemplete.dart';
 import 'package:chamber_of_commerce/widgets/CustomBottomNavBar.dart';
 import 'package:chamber_of_commerce/widgets/GridScreen.dart';
 import 'package:chamber_of_commerce/widgets/GridSingle.dart';
@@ -26,46 +26,24 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
-class Transport_listing extends StatefulWidget {
+class Manufacturing_listing extends StatefulWidget {
   final int index;
   final String title;
   final List<Map<String, String>> businessCompanyProfile ;
-  const Transport_listing({super.key,required this.index,required this.title,required this.businessCompanyProfile});
+  const Manufacturing_listing({super.key,required this.index,required this.title,required this.businessCompanyProfile});
   @override
-  State<Transport_listing> createState() => _Transport_listingState();
+  State<Manufacturing_listing> createState() => _Agriculture_listingState();
 }
 
-class _Transport_listingState extends State<Transport_listing> {
-   Stream<List<dynamic>>? _userStream;
+class _Agriculture_listingState extends State<Manufacturing_listing> {
+   Stream<DatabaseEvent>? _userStream;
   // final Map data = widget.businessCompanyProfile[""];
-
-  List<dynamic> _mapSnapshotToCompanyList(DataSnapshot snapshot) {
-    // Handle both Map and List data structures
-    if (snapshot.value is Map) {
-      final Map<dynamic, dynamic> entries = Map.from(snapshot.value as Map);
-      final List<dynamic> companies = [];
-      entries.forEach((key, value) {
-        companies.add(value);
-      });
-      return companies;
-    } else if (snapshot.value is List) {
-      return snapshot.value as List<dynamic>; // Assuming each item in the list represents a company
-    } else {
-      print('Unexpected data type received: ${snapshot.value}');
-      return []; // Empty list if unexpected data type
-    }
-  }  
+   
   @override
   void initState() {
     super.initState();
     try {
-    _userStream = FirebaseDatabase.instance.ref('Query10')
-    .orderByChild('Sector')
-
-             .startAt("TRANSPORT, STORAGE AND COMMUNICATION")
-            .endAt("TRANSPORT, STORAGE AND COMMUNICATION" + '\uffff')
-    .onValue
-   .map((event) => _mapSnapshotToCompanyList(event.snapshot));
+    _userStream = FirebaseDatabase.instance.ref('Query10').onValue;
   } on FirebaseException catch (e) {
     print('Firebase error: ${e.code} - ${e.message}');
     // Handle the error appropriately, potentially display a user-friendly message
@@ -130,7 +108,7 @@ class _Transport_listingState extends State<Transport_listing> {
                       context,
                        TransparentRoute(
                
-                page:   Transport_Home(),
+                page:  Manufacturing_Home(),
               ),
                     ),
                     }
@@ -178,7 +156,7 @@ class _Transport_listingState extends State<Transport_listing> {
         children: [
           
        
-              StreamBuilder<List<dynamic>>(builder:  (context, snapshot) {
+              StreamBuilder<DatabaseEvent>(builder:  (context, snapshot) {
                        return Column(
                          children: [
                   //          const SizedBox(
@@ -218,7 +196,7 @@ class _Transport_listingState extends State<Transport_listing> {
   ///
   ///
   
-    Widget _buildContent(AsyncSnapshot<List<dynamic>> snapshot) {
+    Widget _buildContent(AsyncSnapshot<DatabaseEvent> snapshot) {
     //  print(snapshot.data!.snapshot.value as List<dynamic>);
       if (snapshot.hasError) {
     return Center(
@@ -230,13 +208,12 @@ class _Transport_listingState extends State<Transport_listing> {
     return const Center(child: CircularProgressIndicator());
   }
   //  print(snapshot.data);
-  final all_data = snapshot.data! as List<dynamic>;
-  final data = all_data;
-  // .expand((element) {
-  //   // ... filtering logic using entry.value as Map<String, dynamic>
-  //   final companyName = element['Sector']?.toString() ?? '';
-  //   return companyName.startsWith("AGRICULTURE, HUNTING, FORESTRY, AND FISHING") ? [element] : [];
-  // }).toList();
+  final all_data = snapshot.data!.snapshot.value as List<dynamic>;
+  final data = all_data.expand((element) {
+    // ... filtering logic using entry.value as Map<String, dynamic>
+    final companyName = element['Sector']?.toString() ?? '';
+    return companyName.startsWith("MANUFACTURING") ? [element] : [];
+  }).toList();
   // print(data);
   List<dynamic> filteredBusinesses = data;
   if (data.isEmpty) {
@@ -244,58 +221,197 @@ class _Transport_listingState extends State<Transport_listing> {
   }
   //based on the index categorize SIT+A1:I15802C Description
   var items = [
- "ABROAD RECRUITMENT AND LINKAGE ACTIVITIES",
-"ACTIVITIES OF AIR TRANSPORT" ,
-"BROKER IN VEHICLES RENTING AND SAILING" ,
-"COMMISSION/BROKERS BUSINESS ACTIVITIES" ,
-"CONSTRUCTION MATERIALS, HARDWARE, PLUMBING" ,
-"COURIER ACTIVITIES OTHER THAN NATIONAL POSTAL ACTIVITIES" ,
-"CROSS-COUNTRY PUBLIC TRANSPORT" ,
-"CUSTOMS CLEARANCE" ,
-"EVENT ORGANIZERS" ,
-"FREIGHT FORWARDERS" ,
-"FREIGHT FORWARDERS AND HARBOUR WORKS" ,
-"FREIGHT TRANSPORT BY CONTAINER" ,
-"GROUND HANDLING" ,
-"HOUSHOLDS INCLUDING MATTRESSES,CUSHIONS,BLANKETS ETC" ,
-"INTER-URBAN RAILWAY TRANSPORT" ,
-"LAND TRANSPORT AND RELATED SERVICES" ,
-"LIQUID FREIGHT TRANSPORT SERVICE" ,
-"LOCAL LABOR RECRUTMENT AND LINKAGE ACTIVITIES" ,
-"Operation of roads and toll roads" ,
-"OTHER FREIGHT TRANSPORT BY ROAD" ,
-"Other passenger transport, including the renting of passenger motor vehicles with drivers ." ,
-"OTHER POSTAL AND RELATED COURIER ACTIVITIES" ,
-"Parking garages and parking lots" ,
-"RENTING OF LAND TRANSPORT ( CAR) EQUIPMENT" ,
-"RETAIL TRADE OF VEHICLES" ,
-"SALVAGING OF DISTRESSED VESSELS AND CARGOS" ,
-"SECURITY AND CLEANING SERVICE" ,
-"SHIP AGENTS" ,
-"SPECIAL EVENT ORAGANIZTION ACTIVITIES" ,
-"STORAGE AND WAREHOUSING" ,
-"TAXIS" ,
-"TELECOMMUNICATION" ,
-"TELECOMMUNICATION TERMINAL EQUIPMENTS MAINTENANCE" ,
-"TELECOMMUNICATION VALUE ADDED SERVICE" ,
-"TELECOMMUNICATION VALUE ADDED SERVICES" ,
-"TOUR OPERATORS" ,
-"TOURISM PROMOTION" ,
-"Trade Promotion Service" ,
-"TRANSPORT AGENCIES" ,
-"TRANSPORT OF CARGO TRUCKS" ,
-"TRANSPORT OF CONSTRUCTION MATERIALS" ,
-"TRANSPORT OF DIFFERENT CAR BY CRANES OR PULLING OR LOADING" ,
-"TRANSPORT OF FUEL" ,
-"TRANSPORT SERVICE BY ROAD AND DRY FREIGHT" ,
-"TRAVEL AGENCY REPRESENTATION AND ONLINE TRAVEL AGENCY ACTIVITY" ,
-"TRAVEL AGENT" ,
-"URBAN, SUB URBAN AND INTER-URBAN BUS AND COACH PASSENGER LINES" ,
+ "ADHESIVES, AND GLUES" ,
+"AGRICULTURAL AND FORESTRY MACHINERY" ,
+"AGRICULTURAL PRODUCTS" ,
+"AIRCRAFT AND SPACECRAFT" ,
+"ALCOHOLIC DRINKS" ,
+"ANIMAL FEED" ,
+"ARTICLES OF CONCRETE, CEMENT AND PLASTER" ,
+"BAGS, SACKS, RAPPING & PACKING MATERIALS" ,
+"BAKERY PRODUCTS" ,
+"BASIC CHEMICALS" ,
+"BASIC CHEMICALS, EXCEPT FERTILIZERS AND NITROGEN COMPOUNDS" ,
+"BASIC IRON AND STEEL" ,
+"BEER" ,
+"BLANKETS, MADE-UP FURNISHING ARTICLES AND STUFFED" ,
+"BODIES (COACHWORK) FOR MOTOR VEHICLES; TRAILERS AND SEMI-TRAILERS/MOTOR VEHICLES" ,
+"BROAD CAST EQUIPMENTS TELEVISION AND RADIO RECEIVERS, SOUND OR VIDEO RECORDING OR REPRODUCING APPARATUS AND ASSOCIATED GOODS" ,
+"BUILDERS CARPENTRY AND JOINERY" ,
+"BUTTONS, BUCKLES, SLIDE FASTENERS" ,
+"CANDLES AND MATCH" ,
+"CANNED PRESERVED PROCESSED AND DEHYDRATED FRUIT AND VEGETABLES INCIUDING FRUIT JUICES JUICE EXTRACTS AND POTATO FLOUR MEAL" ,
+"CARPETS,RUGS AND MATS" ,
+"CASTING OF IRON AND STEEL" ,
+"CEMENT, LIME AND PLASTER" ,
+"CLEANING, COSMOTICS AND INPUTS" ,
+"COFFEE AND TEA" ,
+"COFFEE, COFFEE SUBSTITUTES AND TEA" ,
+"COKE OVEN PRODUCTS" ,
+"COMPOUND COKING FATS, MARGARINE AND EDIBLE OILS" ,
+"COMPUTER AND COMPUTER ACCESSORIES AND PERIPHERAL EQUIPMENT" ,
+"COMPUTER NETWORK DESIGN AND CABLE INSTALATION" ,
+"CONFECTIONERY INCLUDING COCOA AND CHOCOLATE" ,
+"CONSTRUCTION MATERIALS" ,
+"CORDAGE,ROPE,TWINE AND NETTING" ,
+"CORKS & CANS" ,
+"COSMETICS ,ESSENTIAL OILS AND RESINOUS ,PERFUME AND CHEMICALS FOR PERFUMES" ,
+"COTTON, TEXTILE FIBERS,YARN, TEXTILES AND TEXTILES CLOTHING" ,
+"CRUDE OIL AND OILSEED CAKE AND MEAL" ,
+"CUTLERY, HAND TOOLS AND GENERAL HARDWARE" ,
+"CUTTING, SHAPING AND FINISHING OF STONE" ,
+"DAIRY PRODUCTS" ,
+"DISTILLING, RECTIFYING AND BLENDING OF SPIRITS; ETHYL ALCOHOL PRODUCTION FROM FERMENTED MATERIALS;MANUFACTURING OF WINE" ,
+"DRESSING AND DYEING" ,
+"EDIBLE OIL" ,
+"EDIBLE SALT" ,
+"EDUCATIONAL SUPPORT EQUIPMENTS" ,
+"ELECTRIC LAMPS AND LIGHTING EQUIPMENT" ,
+"ELECTRIC MOTORS,GENERATORS AND TRANSFORMERS" ,
+"ELECTRICAL EQUIPMENT" ,
+"ELECTRICITY DISTRIBUTION AND CONTROL APPARATUS" ,
+"ELECTROMECHANICAL WORK" ,
+"FABRICATED METAL PRODUCTS" ,
+"FAST FOODS" ,
+"FERTILIZERS AND NITROGEN COMPOUNDS" ,
+"FLOUR AND GRAIN MILL PRODUCTS, INCLUDING RICE AND VEGETABLE MILLING; GRAIN MILL RESIDUES" ,
+"FOAM AND SPONGE" ,
+"FOOD AND ANIMAL FEED PROCESSING MACHINERY" ,
+"FOOD PRODUCTS" ,
+"FOOD STUFF" ,
+"FOOT WEAR" ,
+"FORGING,PRESSING STAMPING AND ROLL-FORMING OF METAL;POWDER METALLURGY" ,
+"GARMENT AND RELATED" ,
+"GASES" ,
+"GENERAL PURPOSE MACHINERY" ,
+"GLASS AND GLASSES PRODUCTS" ,
+"GRINDING/MANUFACTURING OF GRAINS" ,
+"GROWING OF ANIMALS FEED" ,
+"HONEY AND HONEY PRODUCTS" ,
+"HOUSEHOLD AND OFFICE FURNITURE, REQUZITE, BOARDS, APPLIANCES" ,
+"HOUSEHOLD APPLIANCE" ,
+"HOUSEHOLD ELECTRICAL APPLIANCES AND EQUIPMENT" ,
+"HOUSEHOLD GOODS" ,
+"INSTALLATION, AND FIXING OF ALUMINUM WINDOWS AND DOORS/ ALUMINUM WORKS" ,
+"INSULATED WIRE AND CABLE" ,
+"IRON, STEEL AND METALIC MINERALS" ,
+"KINITTED AND CROCHETED FABRICS AND ARTICLES" ,
+"LEATHER AND HIDE TANNING AND FINISHING" ,
+"LEATHER AND LEATHER SUBSTITUTES WEARINGS" ,
+"LEATHER ARTICLES" ,
+"LUBRICANTS & GREASE" ,
+"MACHINERY FOR MINING, QUARRYING AND CONSTRUCTION" ,
+"MADE-UP TEXTILE ARTICLES CORDAGE, ROPE, TWINE AND NETTING, BAGS, SACKS, RAPPING & PACKING MATERIALS" ,
+"MADE-UP TEXTILE ARTICLES, EXCEPT APPAREL" ,
+"MAN MADE FIBER" ,
+"MAN-MADE FIBRES" ,
+"Manfacture of printer ink" ,
+"MANUFACTUR OF CONSUMER ELECTRONIC EQUIPMENT (TV,DVD,RADIO AND SIMILAR EQUIPMENT)" ,
+"MANUFACTURE OF ARTIFICIAL LEATHER SUBSTITUTES" ,
+"MANUFACTURE OF COMMUNICATION MACHINERIES,SPARE PARTS AND APPARATUS AND UTILITIES" ,
+"MANUFACTURE OF ELECTRICAL MACHINERY, APPARATUS UTILITIES" ,
+"manufacture of knitted and crocheted fabrics and articles" ,
+"MANUFACTURE OF SPRING MATTRESS" ,
+"MANUFACTURE OF TRANSPORT VEHICLES PARTS,SPARE PARTS AND TYRE" ,
+"MANUFACTURE OF TYRES AND PLASTIC PRODUCTS" ,
+"MANUFACTURE OF WOOD AND WOOD PRODUCTS" ,
+"MANUFACTURING OF FURNITURE" ,
+"MANUFACTURING OF GALVANIZED STEEL SHEETS" ,
+"MANUFACTURING OF MOTORCYCLES" ,
+"MANUFACTURING OF RAILWAY AND TRAMWAY LOCOMOTIVES AND ROLLING STOCK VEHICLES" ,
+"MATERIALS AND PAINTING INKS USED FOR PROMOTION AND ADVERTISING" ,
+"MEASURING SCALES" ,
+"MEDICAL AND SURGICAL EQUIPMENT AND ORTHOPEDIC APPLIANCES" ,
+"METAL STRUCTURES FROM ALUMINUM" ,
+"METAL STRUCTURES FROM STEEL" ,
+"MILLS FROM STONE" ,
+"MINERALS AND MINERAL PRODUCTS" ,
+"MOTOR VECHICLES" ,
+"MOTOR VEHICLE PARTS AND ACCESSORIES" ,
+"NON-METALLIC MINERAL PRODUCTS" ,
+"OFFICE & HOUSE HOLD EQUIPMENTS" ,
+"OFFICE AND HOUSEHOLD FURNITURE" ,
+"OFFICE, ACCOUNTING AND COMPUTING MACHINERY" ,
+"OPTICAL INSTRUMENTS AND PHOTOGRAPHIC EQUIPMENT" ,
+"OTHER PETROLEUM/SYNTHESISED PRODUCTS" ,
+"OTHER TANNING AND DRESSING OF LEATHER MANUFACTURE OF BAGGAGE, HANDLBAGS,SADDLER AND HARNESS." ,
+"OTHER VEHICLE PARTS AND ACCESSORIES" ,
+"PACKAGING MATERIALS" ,
+"PAGERS, HAND PHONES AND TELECOMMUNICATIONS APPARATUS (EGPALMTOPS, SMART WATCHES, WEARABLE COMPUTER AND ELECTRONIC BOOKS)" ,
+"PAINTS, VARNISHES AND SIMILAR COATINGS, PRINTING INK AND MASTICS" ,
+"PAPER AND PAPER PRODUCTS" ,
+"PAPER AND PAPER PRODUCTS AND STATIONERY" ,
+"PASTA, MACARONI, NOODLES, COUSCOUS AND SIMILAR FARINACEOUS PRODUCTS" ,
+"PERFUMES, COSMETICS ,ESSENTIAL OILS AND RESINOUS" ,
+"PESTICIDES AND AGRO-CHEMICAL PRODUCTS" ,
+"PHARMACETUCALS,MEDICINALCHEMICALS AND BOTANICAL PRODUCTS FOR HUMAN USE" ,
+"PHARMACEUTICALS, MEDICAL CHEMICALS AND BOTANICAL PRODUCTS FOR HUMAN USE" ,
+"PHOTOGRAPHIC AND OPTICAL INSTRUMENTS" ,
+"PLASTIC PRODUCTS" ,
+"PLASTICS IN PRIMARY FORM AND OF SYNTHETIC RUBBER" ,
+"POLISHES,WAXES ,DRESSINGS AND INCENSE" ,
+"PREPARATION OF CONFECTIONERY, INCLUDING COCOA AND CHOCOLATE" ,
+"PREPARED ANIMAL FEEDS" ,
+"PRINTING" ,
+"PRINTING AND RELATED ACTIVITIES" ,
+"PRINTING MATERIALS" ,
+"PRINTING OF BOOKS, BROCHURES, MUSICAL BOOKS AND OTHERS" ,
+"PROCESSING AND CASTING MINERALS" ,
+"PROCESSING AND PRESERVING OF FRUIT AND VEGETABLES" ,
+"PROCESSING OF FRESH MILK (PASTEURISING, HOMOGENISING, STERILISING AND VITAMINISING)" ,
+"PROCESSING OF MEAT BY PRODUCTS INCLUDING HIDES, BONES, ETC" ,
+"PRODUCTS OF WOOD(EXCEPT FURNITURE)" ,
+"PULP, PAPER AND PAPERBOARD AND OF CONTAINERS MADE FROM PAPER PRODUCT" ,
+"PVC GRANULE FOR SOLE & PLASTIC SHOE" ,
+"RECREATIONAL EQUIPMENTS" ,
+"RECYCLING OF NON-METAL WASTE AND SCRAP" ,
+"REFRACTORY CERAMIC PRODUCTS" ,
+"REPRODUCTION OF RECORDED MEDIA" ,
+"RUBBER PRODUCTS" ,
+"SANITARY NAPKIN(PAD )AND DIAPER" ,
+"SECURITY CAMERA" ,
+"SHEET & PLATE GLASS, GLASS BLOCKS, TUBES & RODS; GLASS FIBERS & GLASS WOOL" ,
+"SHOES/CARS/PRINTING INK" ,
+"SLAUGHTERING, DRESSING AND PACKING OF LIVESTOCK, INCLUDING POULTRY AND SMALL GAME FOR MEAT" ,
+"SOAP AND OTHER CLEANING COMPOUNDS" ,
+"SOFT DRINK,BOTTLED WATERS/MINERAL WATERS" ,
+"SOFTWARE DEVELOPMENT ( INCLUDING DESIGN, ENRICHMENT AND IMPLEMENTATION)" ,
+"Software Instalation,ommissioning,Monitoring and Erection Activity" ,
+"SOUVENIRS,ARTIFACT AND ARTIFICIAL JEWELRY/ TRADITIONAL WEAR" ,
+"SPECIAL PURPOSE MACHINERY" ,
+"SPECIAL PURPOSE MACHINERY (FOR TEXTILE)" ,
+"SPICES,CONDIMENTS,VBINGAR,YEAST,EGG PRODUCE SOUPS AND OTHER FOOD PRODUCT." ,
+"SPINNING OF TEXTILE FIBERS AND WEAVING OF TEXTILES" ,
+"SPINNING, WEAVING AND FINISHING OF TEXTILES" ,
+"SPINNING, WEAVING AND FINISHING OF TRADITIONAL CLOTHES" ,
+"SPINNING, WEAVING AND FINISHING OF YARNS AND FABRICS PREDOMINANTLY OF WOOL AND ANIMAL FIBERS" ,
+"SPORTS GOODS AND ENTERTAINMENT REQUISITES" ,
+"STONE PRODUCTS" ,
+"STRUCTURAL CLAY AND CONCRETE PRODUCTS" ,
+"STRUCTURAL METAL PRODUCTS" ,
+"STRUCTURAL METAL PRODUCTS, TANKS, RESERVOIRS AND STEAM GENERATORS" ,
+"STRUCTURAL NON-REFRACTORY CLAY AND CERAMIC PRODUCTS" ,
+"SUGAR, INCLUDING GOLDEN SYRUP AND CASTOR SUGAR" ,
+"TANKS, RESERVOIRS, SAFE BOXES AND SIMILAR CONTAINERS OF METAL" ,
+"TELEVISION AND RADIO RECEIVERS, SOUND OR VIDEO RECORDING OR REPRODUCING APPARATUS AND ASSOCIATED GOODS" ,
+"TENTS, TARPAULINS, SAILS AND CANVAS GOODS" ,
+"textile and textile articles,textile ascceris" ,
+"TEXTILES AND GARMENT" ,
+"TOBACCO PRODUCTS" ,
+"TOILET TISSUE AND NAPKIN PAPER" ,
+"TRADITIONAL FOODS" ,
+"TRANSPORT EQUIPMENT" ,
+"TREATMENT AND COATING OF METALS; GENERAL MECHANICAL ENGINEERING ON A FEE OR CONTRACT BASIS" ,
+"TYRES AND TUBES" ,
+"VEGETABLES AND ANIMAL OIL FAT" ,
+"VENEER SHEETS; PLYWOOD, LAMINBOARD, PARTICLE BOARD AND OTHER PANELS AND BOARDS" ,
+"VETERINARY DRUGS, MEDICINES AND EQUIPMENTS" ,
+"WEARING AND APPRAL, EXCEPT FUR APPAREL" ,
+"WINE" ,
 ];
-
+ items.sort((a,b)=>a.compareTo(b));
 // print(items);
 // for (var i = 0; i < items.length; i++) {
- items.sort((a,b)=>a.compareTo(b));
   var currentItem =  items[widget.index];
   // console.log(`
   // if(widget.index == i){
@@ -306,7 +422,7 @@ class _Transport_listingState extends State<Transport_listing> {
       final company = element['Sub-Sector']?.toString() ?? '';
       return company.startsWith("${currentItem}") ? [element] : [];
     }).toList();
-  // print(i);ite
+//   print(i);
 //   }
 
 // }
@@ -400,102 +516,103 @@ class _Transport_listingState extends State<Transport_listing> {
                          
                      //   ],
                      // ),
-                     if(tel !="")
-                     Row(
-                       children: [
-                         InkWell( // Wrap the content in an InkWell
-                 onTap: () {
-                   launch('tel:$tel'); // Launch the phone dialer with the number
-                 },
-                        child: Row(
-                           children: [
-                              Container(
-                               // width: 20,
-                               // height: 20,
-                               decoration: BoxDecoration(
+                //      if(tel !="")
+                //      Row(
+                //        children: [
+                //          InkWell( // Wrap the content in an InkWell
+                //  onTap: () {
+                //    launch('tel:$tel'); // Launch the phone dialer with the number
+                //  },
+                //         child: Row(
+                //            children: [
+                //               Container(
+                //                // width: 20,
+                //                // height: 20,
+                //                decoration: BoxDecoration(
                      
-                         color: Color.fromARGB(255, 255, 255, 255),
+                //          color: Color.fromARGB(255, 255, 255, 255),
                  
-                 borderRadius:BorderRadius.circular(999), // Set border width
+                //  borderRadius:BorderRadius.circular(999), // Set border width
                  
-                   ),
-                               child: SvgPicture.asset('assets/images/vector1.svg',width: 10,height: 10,)),
-                             SizedBox(width: 10,),
-                             Text(tel,softWrap: true,overflow: TextOverflow.ellipsis,),
-                           ],
-                         ),),
-                       ],
-                     ),
-                     SizedBox(height: 5,),
+                //    ),
+                //                child: SvgPicture.asset('assets/images/vector1.svg',width: 10,height: 10,)),
+                //              SizedBox(width: 10,),
+                //              Text(tel,softWrap: true,overflow: TextOverflow.ellipsis,),
+                //            ],
+                //          ),),
+                //        ],
+                //      ),
+                //      SizedBox(height: 5,),
                     
-                      if(website !="")
-                     Row(
-                     children: [
-                      InkWell( // Wrap the content in an InkWell
-                         onTap: () {
-                           launch(website); // Launch the URL in a web browser
-                 },
-                       child:Row(
-                       children: [
-                          Container(
-                           // width: 20,
-                           // height: 20,
-                           decoration: BoxDecoration(
+                //       if(website !="")
+                //      Row(
+                //      children: [
+                //       InkWell( // Wrap the content in an InkWell
+                //          onTap: () {
+                //            launch(website); // Launch the URL in a web browser
+                //  },
+                //        child:Row(
+                //        children: [
+                //           Container(
+                //            // width: 20,
+                //            // height: 20,
+                //            decoration: BoxDecoration(
                      
-                         color: Color.fromARGB(255, 255, 255, 255),
+                //          color: Color.fromARGB(255, 255, 255, 255),
                  
-                 borderRadius:BorderRadius.circular(999), // Set border width
+                //  borderRadius:BorderRadius.circular(999), // Set border width
                  
-                   ),
-                           child: SvgPicture.asset('assets/images/vector.svg',width: 10,height: 10,)),
-                         SizedBox(width: 10,),
-                         Text(website,softWrap: true,overflow: TextOverflow.ellipsis,),
-                       ],
-                     )),],),
-                      SizedBox(height: 5,),
-                      if(mobile !="")
-                     Row(
-                       children: [
-                          Container(
-                           // width: 10,
-                           // height: 10,
-                           decoration: BoxDecoration(
+                //    ),
+                //            child: SvgPicture.asset('assets/images/vector.svg',width: 10,height: 10,)),
+                //          SizedBox(width: 10,),
+                //          Text(website,softWrap: true,overflow: TextOverflow.ellipsis,),
+                //        ],
+                //      )),],),
+                //       SizedBox(height: 5,),
+                //       if(mobile !="")
+                //      Row(
+                //        children: [
+                //           Container(
+                //            // width: 10,
+                //            // height: 10,
+                //            decoration: BoxDecoration(
                      
-                         color: Color.fromARGB(255, 255, 255, 255),
+                //          color: Color.fromARGB(255, 255, 255, 255),
                  
-                 borderRadius:BorderRadius.circular(999), // Set border width
+                //  borderRadius:BorderRadius.circular(999), // Set border width
                  
-                   ),
-                           child: SvgPicture.asset('assets/images/vector3.svg',width: 10,height: 10,)),
-                         SizedBox(width: 10,),
-                         Text(mobile,softWrap: true,overflow: TextOverflow.ellipsis,),
-                       ],
-                     ),
-                      SizedBox(height: 5,),
-                       if(email !="")
-                     Row(
-                   children: [
-                     InkWell( // Wrap the content in an InkWell
-                 onTap: () {
-                   launch('mailto:$email'); // Launch email app with recipient
-                 },
-                 child: Row(
-                       children: [
-                          Container(
-                           // width: 20,
-                           // height: 20,
-                           decoration: BoxDecoration(
+                //    ),
+                //            child: SvgPicture.asset('assets/images/vector3.svg',width: 10,height: 10,)),
+                //          SizedBox(width: 10,),
+                //          Text(mobile,softWrap: true,overflow: TextOverflow.ellipsis,),
+                //        ],
+                //      ),
+                //       SizedBox(height: 5,),
+                //        if(email !="")
+                //      Row(
+                //    children: [
+                //      InkWell( // Wrap the content in an InkWell
+                //  onTap: () {
+                //    launch('mailto:$email'); // Launch email app with recipient
+                //  },
+                //  child: Row(
+                //        children: [
+                //           Container(
+                //            // width: 20,
+                //            // height: 20,
+                //            decoration: BoxDecoration(
                      
-                         color: Color.fromARGB(255, 255, 255, 255),
+                //          color: Color.fromARGB(255, 255, 255, 255),
                  
-                 borderRadius:BorderRadius.circular(999), // Set border width
+                //  borderRadius:BorderRadius.circular(999), // Set border width
                  
-                   ),
-                           child: SvgPicture.asset('assets/images/vector2.svg',width: 10,height: 10,)),
-                          SizedBox(width: 10,),
-                         Text(email,softWrap: true,overflow: TextOverflow.ellipsis,),
-                       ],
-                     ),)]),
+                //    ),
+                //            child: SvgPicture.asset('assets/images/vector2.svg',width: 10,height: 10,)),
+                //           SizedBox(width: 10,),
+                //          Text(email,softWrap: true,overflow: TextOverflow.ellipsis,),
+                //        ],
+                //      ),)]),
+                 ContactTemeplete(tel: tel,mobile: mobile,email: email, website: website,),
                       SizedBox(height: 5,),
                      Text('Sector: $sector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
                      SizedBox(height: 5,),

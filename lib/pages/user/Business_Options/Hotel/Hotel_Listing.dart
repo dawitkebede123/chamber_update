@@ -10,7 +10,6 @@ import 'package:chamber_of_commerce/pages/user/Company.dart';
 import 'package:chamber_of_commerce/pages/user/Company_detail.dart';
 import 'package:chamber_of_commerce/pages/user/Home.dart';
 import 'package:chamber_of_commerce/widgets/BottomNavBar.dart';
-import 'package:chamber_of_commerce/widgets/ContactTemplete.dart';
 import 'package:chamber_of_commerce/widgets/CustomBottomNavBar.dart';
 import 'package:chamber_of_commerce/widgets/GridScreen.dart';
 import 'package:chamber_of_commerce/widgets/GridSingle.dart';
@@ -37,14 +36,36 @@ class Hotel_listing extends StatefulWidget {
 }
 
 class _Hotel_listingState extends State<Hotel_listing> {
-   Stream<DatabaseEvent>? _userStream;
+   Stream<List<dynamic>>? _userStream;
   // final Map data = widget.businessCompanyProfile[""];
-   
+
+  List<dynamic> _mapSnapshotToCompanyList(DataSnapshot snapshot) {
+    // Handle both Map and List data structures
+    if (snapshot.value is Map) {
+      final Map<dynamic, dynamic> entries = Map.from(snapshot.value as Map);
+      final List<dynamic> companies = [];
+      entries.forEach((key, value) {
+        companies.add(value);
+      });
+      return companies;
+    } else if (snapshot.value is List) {
+      return snapshot.value as List<dynamic>; // Assuming each item in the list represents a company
+    } else {
+      print('Unexpected data type received: ${snapshot.value}');
+      return []; // Empty list if unexpected data type
+    }
+  }  
   @override
   void initState() {
     super.initState();
     try {
-    _userStream = FirebaseDatabase.instance.ref('Query10').onValue;
+    _userStream = FirebaseDatabase.instance.ref('Query10')
+    .orderByChild('Sector')
+
+             .startAt("HOTEL AND RESTAURANTS")
+            .endAt("HOTEL AND RESTAURANTS" + '\uffff')
+    .onValue
+   .map((event) => _mapSnapshotToCompanyList(event.snapshot));
   } on FirebaseException catch (e) {
     print('Firebase error: ${e.code} - ${e.message}');
     // Handle the error appropriately, potentially display a user-friendly message
@@ -157,7 +178,7 @@ class _Hotel_listingState extends State<Hotel_listing> {
         children: [
           
        
-              StreamBuilder<DatabaseEvent>(builder:  (context, snapshot) {
+              StreamBuilder<List<dynamic>>(builder:  (context, snapshot) {
                        return Column(
                          children: [
                   //          const SizedBox(
@@ -197,7 +218,7 @@ class _Hotel_listingState extends State<Hotel_listing> {
   ///
   ///
   
-    Widget _buildContent(AsyncSnapshot<DatabaseEvent> snapshot) {
+    Widget _buildContent(AsyncSnapshot<List<dynamic>> snapshot) {
     //  print(snapshot.data!.snapshot.value as List<dynamic>);
       if (snapshot.hasError) {
     return Center(
@@ -209,12 +230,13 @@ class _Hotel_listingState extends State<Hotel_listing> {
     return const Center(child: CircularProgressIndicator());
   }
   //  print(snapshot.data);
-  final all_data = snapshot.data!.snapshot.value as List<dynamic>;
-  final data = all_data.expand((element) {
-    // ... filtering logic using entry.value as Map<String, dynamic>
-    final companyName = element['Sector']?.toString() ?? '';
-    return companyName.startsWith("HOTEL AND RESTAURANTS") ? [element] : [];
-  }).toList();
+  final all_data = snapshot.data! as List<dynamic>;
+  final data = all_data;
+  // .expand((element) {
+  //   // ... filtering logic using entry.value as Map<String, dynamic>
+  //   final companyName = element['Sector']?.toString() ?? '';
+  //   return companyName.startsWith("AGRICULTURE, HUNTING, FORESTRY, AND FISHING") ? [element] : [];
+  // }).toList();
   // print(data);
   List<dynamic> filteredBusinesses = data;
   if (data.isEmpty) {
@@ -222,8 +244,7 @@ class _Hotel_listingState extends State<Hotel_listing> {
   }
   //based on the index categorize SIT+A1:I15802C Description
   var items = [
- 
- "RESTAURANTS" ,
+  "RESTAURANTS" ,
 "HOTELS" ,
 "CAFETERIA AND BREAKFAST HOUSES" ,
 "GUEST HOUSESAND PENSIONS" ,
@@ -243,8 +264,6 @@ class _Hotel_listingState extends State<Hotel_listing> {
 "SNACK AND KETTLE COFFEE HOUSES" ,
 "MOTEL SERVICE" ,
 "FABRICATED METALS" ,
-
-
 
 ];
 
@@ -355,103 +374,102 @@ class _Hotel_listingState extends State<Hotel_listing> {
                          
                      //   ],
                      // ),
-                //      if(tel !="")
-                //      Row(
-                //        children: [
-                //          InkWell( // Wrap the content in an InkWell
-                //  onTap: () {
-                //    launch('tel:$tel'); // Launch the phone dialer with the number
-                //  },
-                //         child: Row(
-                //            children: [
-                //               Container(
-                //                // width: 20,
-                //                // height: 20,
-                //                decoration: BoxDecoration(
+                     if(tel !="")
+                     Row(
+                       children: [
+                         InkWell( // Wrap the content in an InkWell
+                 onTap: () {
+                   launch('tel:$tel'); // Launch the phone dialer with the number
+                 },
+                        child: Row(
+                           children: [
+                              Container(
+                               // width: 20,
+                               // height: 20,
+                               decoration: BoxDecoration(
                      
-                //          color: Color.fromARGB(255, 255, 255, 255),
+                         color: Color.fromARGB(255, 255, 255, 255),
                  
-                //  borderRadius:BorderRadius.circular(999), // Set border width
+                 borderRadius:BorderRadius.circular(999), // Set border width
                  
-                //    ),
-                //                child: SvgPicture.asset('assets/images/vector1.svg',width: 10,height: 10,)),
-                //              SizedBox(width: 10,),
-                //              Text(tel,softWrap: true,overflow: TextOverflow.ellipsis,),
-                //            ],
-                //          ),),
-                //        ],
-                //      ),
-                //      SizedBox(height: 5,),
+                   ),
+                               child: SvgPicture.asset('assets/images/vector1.svg',width: 10,height: 10,)),
+                             SizedBox(width: 10,),
+                             Text(tel,softWrap: true,overflow: TextOverflow.ellipsis,),
+                           ],
+                         ),),
+                       ],
+                     ),
+                     SizedBox(height: 5,),
                     
-                //       if(website !="")
-                //      Row(
-                //      children: [
-                //       InkWell( // Wrap the content in an InkWell
-                //          onTap: () {
-                //            launch(website); // Launch the URL in a web browser
-                //  },
-                //        child:Row(
-                //        children: [
-                //           Container(
-                //            // width: 20,
-                //            // height: 20,
-                //            decoration: BoxDecoration(
+                      if(website !="")
+                     Row(
+                     children: [
+                      InkWell( // Wrap the content in an InkWell
+                         onTap: () {
+                           launch(website); // Launch the URL in a web browser
+                 },
+                       child:Row(
+                       children: [
+                          Container(
+                           // width: 20,
+                           // height: 20,
+                           decoration: BoxDecoration(
                      
-                //          color: Color.fromARGB(255, 255, 255, 255),
+                         color: Color.fromARGB(255, 255, 255, 255),
                  
-                //  borderRadius:BorderRadius.circular(999), // Set border width
+                 borderRadius:BorderRadius.circular(999), // Set border width
                  
-                //    ),
-                //            child: SvgPicture.asset('assets/images/vector.svg',width: 10,height: 10,)),
-                //          SizedBox(width: 10,),
-                //          Text(website,softWrap: true,overflow: TextOverflow.ellipsis,),
-                //        ],
-                //      )),],),
-                //       SizedBox(height: 5,),
-                //       if(mobile !="")
-                //      Row(
-                //        children: [
-                //           Container(
-                //            // width: 10,
-                //            // height: 10,
-                //            decoration: BoxDecoration(
+                   ),
+                           child: SvgPicture.asset('assets/images/vector.svg',width: 10,height: 10,)),
+                         SizedBox(width: 10,),
+                         Text(website,softWrap: true,overflow: TextOverflow.ellipsis,),
+                       ],
+                     )),],),
+                      SizedBox(height: 5,),
+                      if(mobile !="")
+                     Row(
+                       children: [
+                          Container(
+                           // width: 10,
+                           // height: 10,
+                           decoration: BoxDecoration(
                      
-                //          color: Color.fromARGB(255, 255, 255, 255),
+                         color: Color.fromARGB(255, 255, 255, 255),
                  
-                //  borderRadius:BorderRadius.circular(999), // Set border width
+                 borderRadius:BorderRadius.circular(999), // Set border width
                  
-                //    ),
-                //            child: SvgPicture.asset('assets/images/vector3.svg',width: 10,height: 10,)),
-                //          SizedBox(width: 10,),
-                //          Text(mobile,softWrap: true,overflow: TextOverflow.ellipsis,),
-                //        ],
-                //      ),
-                //       SizedBox(height: 5,),
-                //        if(email !="")
-                //      Row(
-                //    children: [
-                //      InkWell( // Wrap the content in an InkWell
-                //  onTap: () {
-                //    launch('mailto:$email'); // Launch email app with recipient
-                //  },
-                //  child: Row(
-                //        children: [
-                //           Container(
-                //            // width: 20,
-                //            // height: 20,
-                //            decoration: BoxDecoration(
+                   ),
+                           child: SvgPicture.asset('assets/images/vector3.svg',width: 10,height: 10,)),
+                         SizedBox(width: 10,),
+                         Text(mobile,softWrap: true,overflow: TextOverflow.ellipsis,),
+                       ],
+                     ),
+                      SizedBox(height: 5,),
+                       if(email !="")
+                     Row(
+                   children: [
+                     InkWell( // Wrap the content in an InkWell
+                 onTap: () {
+                   launch('mailto:$email'); // Launch email app with recipient
+                 },
+                 child: Row(
+                       children: [
+                          Container(
+                           // width: 20,
+                           // height: 20,
+                           decoration: BoxDecoration(
                      
-                //          color: Color.fromARGB(255, 255, 255, 255),
+                         color: Color.fromARGB(255, 255, 255, 255),
                  
-                //  borderRadius:BorderRadius.circular(999), // Set border width
+                 borderRadius:BorderRadius.circular(999), // Set border width
                  
-                //    ),
-                //            child: SvgPicture.asset('assets/images/vector2.svg',width: 10,height: 10,)),
-                //           SizedBox(width: 10,),
-                //          Text(email,softWrap: true,overflow: TextOverflow.ellipsis,),
-                //        ],
-                //      ),)]),
-                 ContactTemeplete(tel: tel,mobile: mobile,email: email, website: website,),
+                   ),
+                           child: SvgPicture.asset('assets/images/vector2.svg',width: 10,height: 10,)),
+                          SizedBox(width: 10,),
+                         Text(email,softWrap: true,overflow: TextOverflow.ellipsis,),
+                       ],
+                     ),)]),
                       SizedBox(height: 5,),
                      Text('Sector: $sector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
                      SizedBox(height: 5,),

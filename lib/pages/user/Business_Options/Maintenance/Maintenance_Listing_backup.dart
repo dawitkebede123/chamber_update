@@ -3,13 +3,13 @@ import 'package:chamber_of_commerce/main.dart';
 import 'package:chamber_of_commerce/pages/user/Business.dart';
 import 'package:chamber_of_commerce/pages/user/Business_Options/Agriculture/Agriculture_Home.dart';
 import 'package:chamber_of_commerce/pages/user/Business_Options/Export/Export_Home.dart';
-import 'package:chamber_of_commerce/pages/user/Business_Options/Import/Import_Home.dart';
-import 'package:chamber_of_commerce/pages/user/Business_Options/Transport/Transport_Home.dart';
+import 'package:chamber_of_commerce/pages/user/Business_Options/Maintenance/Maintenance_Home.dart';
 import 'package:chamber_of_commerce/pages/user/Company%20_business.dart';
 import 'package:chamber_of_commerce/pages/user/Company.dart';
 import 'package:chamber_of_commerce/pages/user/Company_detail.dart';
 import 'package:chamber_of_commerce/pages/user/Home.dart';
 import 'package:chamber_of_commerce/widgets/BottomNavBar.dart';
+import 'package:chamber_of_commerce/widgets/ContactTemplete.dart';
 import 'package:chamber_of_commerce/widgets/CustomBottomNavBar.dart';
 import 'package:chamber_of_commerce/widgets/GridScreen.dart';
 import 'package:chamber_of_commerce/widgets/GridSingle.dart';
@@ -26,46 +26,24 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
-class Transport_listing extends StatefulWidget {
+class Maintenance_listing extends StatefulWidget {
   final int index;
   final String title;
   final List<Map<String, String>> businessCompanyProfile ;
-  const Transport_listing({super.key,required this.index,required this.title,required this.businessCompanyProfile});
+  const Maintenance_listing({super.key,required this.index,required this.title,required this.businessCompanyProfile});
   @override
-  State<Transport_listing> createState() => _Transport_listingState();
+  State<Maintenance_listing> createState() => _Maintenance_listingState();
 }
 
-class _Transport_listingState extends State<Transport_listing> {
-   Stream<List<dynamic>>? _userStream;
+class _Maintenance_listingState extends State<Maintenance_listing> {
+   Stream<DatabaseEvent>? _userStream;
   // final Map data = widget.businessCompanyProfile[""];
-
-  List<dynamic> _mapSnapshotToCompanyList(DataSnapshot snapshot) {
-    // Handle both Map and List data structures
-    if (snapshot.value is Map) {
-      final Map<dynamic, dynamic> entries = Map.from(snapshot.value as Map);
-      final List<dynamic> companies = [];
-      entries.forEach((key, value) {
-        companies.add(value);
-      });
-      return companies;
-    } else if (snapshot.value is List) {
-      return snapshot.value as List<dynamic>; // Assuming each item in the list represents a company
-    } else {
-      print('Unexpected data type received: ${snapshot.value}');
-      return []; // Empty list if unexpected data type
-    }
-  }  
+   
   @override
   void initState() {
     super.initState();
     try {
-    _userStream = FirebaseDatabase.instance.ref('Query10')
-    .orderByChild('Sector')
-
-             .startAt("TRANSPORT, STORAGE AND COMMUNICATION")
-            .endAt("TRANSPORT, STORAGE AND COMMUNICATION" + '\uffff')
-    .onValue
-   .map((event) => _mapSnapshotToCompanyList(event.snapshot));
+    _userStream = FirebaseDatabase.instance.ref('Query10').onValue;
   } on FirebaseException catch (e) {
     print('Firebase error: ${e.code} - ${e.message}');
     // Handle the error appropriately, potentially display a user-friendly message
@@ -130,7 +108,7 @@ class _Transport_listingState extends State<Transport_listing> {
                       context,
                        TransparentRoute(
                
-                page:   Transport_Home(),
+                page:  Maintenance_Home(),
               ),
                     ),
                     }
@@ -178,7 +156,7 @@ class _Transport_listingState extends State<Transport_listing> {
         children: [
           
        
-              StreamBuilder<List<dynamic>>(builder:  (context, snapshot) {
+              StreamBuilder<DatabaseEvent>(builder:  (context, snapshot) {
                        return Column(
                          children: [
                   //          const SizedBox(
@@ -218,7 +196,7 @@ class _Transport_listingState extends State<Transport_listing> {
   ///
   ///
   
-    Widget _buildContent(AsyncSnapshot<List<dynamic>> snapshot) {
+    Widget _buildContent(AsyncSnapshot<DatabaseEvent> snapshot) {
     //  print(snapshot.data!.snapshot.value as List<dynamic>);
       if (snapshot.hasError) {
     return Center(
@@ -230,13 +208,12 @@ class _Transport_listingState extends State<Transport_listing> {
     return const Center(child: CircularProgressIndicator());
   }
   //  print(snapshot.data);
-  final all_data = snapshot.data! as List<dynamic>;
-  final data = all_data;
-  // .expand((element) {
-  //   // ... filtering logic using entry.value as Map<String, dynamic>
-  //   final companyName = element['Sector']?.toString() ?? '';
-  //   return companyName.startsWith("AGRICULTURE, HUNTING, FORESTRY, AND FISHING") ? [element] : [];
-  // }).toList();
+  final all_data = snapshot.data!.snapshot.value as List<dynamic>;
+  final data = all_data.expand((element) {
+    // ... filtering logic using entry.value as Map<String, dynamic>
+    final companyName = element['Sector']?.toString() ?? '';
+    return companyName.startsWith("MAINTENNANCE AND REPAIR") ? [element] : [];
+  }).toList();
   // print(data);
   List<dynamic> filteredBusinesses = data;
   if (data.isEmpty) {
@@ -244,58 +221,36 @@ class _Transport_listingState extends State<Transport_listing> {
   }
   //based on the index categorize SIT+A1:I15802C Description
   var items = [
- "ABROAD RECRUITMENT AND LINKAGE ACTIVITIES",
-"ACTIVITIES OF AIR TRANSPORT" ,
-"BROKER IN VEHICLES RENTING AND SAILING" ,
-"COMMISSION/BROKERS BUSINESS ACTIVITIES" ,
-"CONSTRUCTION MATERIALS, HARDWARE, PLUMBING" ,
-"COURIER ACTIVITIES OTHER THAN NATIONAL POSTAL ACTIVITIES" ,
-"CROSS-COUNTRY PUBLIC TRANSPORT" ,
-"CUSTOMS CLEARANCE" ,
-"EVENT ORGANIZERS" ,
-"FREIGHT FORWARDERS" ,
-"FREIGHT FORWARDERS AND HARBOUR WORKS" ,
-"FREIGHT TRANSPORT BY CONTAINER" ,
-"GROUND HANDLING" ,
-"HOUSHOLDS INCLUDING MATTRESSES,CUSHIONS,BLANKETS ETC" ,
-"INTER-URBAN RAILWAY TRANSPORT" ,
-"LAND TRANSPORT AND RELATED SERVICES" ,
-"LIQUID FREIGHT TRANSPORT SERVICE" ,
-"LOCAL LABOR RECRUTMENT AND LINKAGE ACTIVITIES" ,
-"Operation of roads and toll roads" ,
-"OTHER FREIGHT TRANSPORT BY ROAD" ,
-"Other passenger transport, including the renting of passenger motor vehicles with drivers ." ,
-"OTHER POSTAL AND RELATED COURIER ACTIVITIES" ,
-"Parking garages and parking lots" ,
-"RENTING OF LAND TRANSPORT ( CAR) EQUIPMENT" ,
-"RETAIL TRADE OF VEHICLES" ,
-"SALVAGING OF DISTRESSED VESSELS AND CARGOS" ,
-"SECURITY AND CLEANING SERVICE" ,
-"SHIP AGENTS" ,
-"SPECIAL EVENT ORAGANIZTION ACTIVITIES" ,
-"STORAGE AND WAREHOUSING" ,
-"TAXIS" ,
-"TELECOMMUNICATION" ,
-"TELECOMMUNICATION TERMINAL EQUIPMENTS MAINTENANCE" ,
-"TELECOMMUNICATION VALUE ADDED SERVICE" ,
-"TELECOMMUNICATION VALUE ADDED SERVICES" ,
-"TOUR OPERATORS" ,
-"TOURISM PROMOTION" ,
-"Trade Promotion Service" ,
-"TRANSPORT AGENCIES" ,
-"TRANSPORT OF CARGO TRUCKS" ,
-"TRANSPORT OF CONSTRUCTION MATERIALS" ,
-"TRANSPORT OF DIFFERENT CAR BY CRANES OR PULLING OR LOADING" ,
-"TRANSPORT OF FUEL" ,
-"TRANSPORT SERVICE BY ROAD AND DRY FREIGHT" ,
-"TRAVEL AGENCY REPRESENTATION AND ONLINE TRAVEL AGENCY ACTIVITY" ,
-"TRAVEL AGENT" ,
-"URBAN, SUB URBAN AND INTER-URBAN BUS AND COACH PASSENGER LINES" ,
+  "AUTOMOTIVE FUEL & LUBRICANTS IN GAS STATION /CAR WASH SERVICE" ,
+"Car Wash Service and grease" ,
+"CHEMICALS AND CHEMICAL PRODUCTS" ,
+"COMPUTER AND COMPUTER ACCESSORIES MAINTENANCE" ,
+"ELECTRICAL REPAIRS" ,
+"FUEL STATION EQUPEMENTS" ,
+"GOODS USED FOR PUBLIC AND PERSONAL PURPOSE" ,
+"HOUSEHOLD AND OFFICE FURNITURE, REQUZITE, BOARDS, APPLIANCES" ,
+"IMPORTING OF VEHICLES" ,
+"IMPORTING OF VEHICLES SPARE PARTS,REGULATORY EQUIPMENTS AND JEWELRY/DECOR SUPPLIES" ,
+"INSTALLATION AND MAINENANCE SERVICES" ,
+"INSTALLATION AND MAINTENANCE OF COMMUNICATION AND ELECTRONIC EQUIPMENTS" ,
+"INSTALLATION AND MAINTENANCE OF MACHINERIES" ,
+"INSTALLATION, AND FIXING OF ALUMINUM WINDOWS AND DOORS/ ALUMINUM WORKS" ,
+"INSTALLATION, AND MAINTENANCE SERVICES" ,
+"MAINTENANCE AND REPAIR OF FOOT WARE AND LEATHER PRODUCTS" ,
+"MAINTENANCE AND REPAIR OF OFFICE, ACCOUNTING AND COMPUTING MACHINERY" ,
+"MOTOR CYCLE, BICYCLE AND TRI CYCLE (BAJAJ) PARTS AND ACCESSORIES" ,
+"MULTI PURPOSE VEHICLES AND PARTS MAINTENANCE" ,
+"OTHER GOODS THAT USED FOR PUBLIC AND PERSONAL PURPOSE" ,
+"RADIATION EMITTING EQUIPMENT'S INSTALLATION,COMMISSIONING MAINTENANCE" ,
+"RUBBER MAINTENANCE,CLEAN GREASE AND RELATED SERVICE" ,
+"SPECIAL CARS AND VEHICLES BODY REPAIR" ,
+"TELECOMMUNICATION EQUIPMENTS/ACCESSORIES/SALES/MAINTENANCE" ,
+"TYRE REPAIRS" ,
+"USED MOTOR VEHICLES" ,
 ];
-
+items.sort((a,b)=>a.compareTo(b));
 // print(items);
 // for (var i = 0; i < items.length; i++) {
- items.sort((a,b)=>a.compareTo(b));
   var currentItem =  items[widget.index];
   // console.log(`
   // if(widget.index == i){
@@ -303,10 +258,10 @@ class _Transport_listingState extends State<Transport_listing> {
     // print(data);
     filteredBusinesses = filteredBusinesses.expand((element) {
       // ... filtering logic using entry.value as Map<String, dynamic>
-      final company = element['Sub-Sector']?.toString() ?? '';
+      final company = element['Sub-Sector']?.toString().toUpperCase() ?? '';
       return company.startsWith("${currentItem}") ? [element] : [];
     }).toList();
-  // print(i);ite
+  // print(i);
 //   }
 
 // }
@@ -383,7 +338,7 @@ class _Transport_listingState extends State<Transport_listing> {
                          // Column(children: [
                          //   SvgPicture.asset('assets/images/phone_icon.svg'),
                          //   SizedBox(height: 10,),
-                         // //  SvgPicture.asset('assets/images/fax_icon.svg')
+                         // //  SvgPicture.asset('assets/images/mobile_icon.svg')
                             
                          // ],),
                          // SizedBox(width: 20,),
@@ -400,106 +355,107 @@ class _Transport_listingState extends State<Transport_listing> {
                          
                      //   ],
                      // ),
-                     if(tel !="")
-                     Row(
-                       children: [
-                         InkWell( // Wrap the content in an InkWell
-                 onTap: () {
-                   launch('tel:$tel'); // Launch the phone dialer with the number
-                 },
-                        child: Row(
-                           children: [
-                              Container(
-                               // width: 20,
-                               // height: 20,
-                               decoration: BoxDecoration(
+                //      if(tel !="")
+                //      Row(
+                //        children: [
+                //          InkWell( // Wrap the content in an InkWell
+                //  onTap: () {
+                //    launch('tel:$tel'); // Launch the phone dialer with the number
+                //  },
+                //         child: Row(
+                //            children: [
+                //               Container(
+                //                // width: 20,
+                //                // height: 20,
+                //                decoration: BoxDecoration(
                      
-                         color: Color.fromARGB(255, 255, 255, 255),
+                //          color: Color.fromARGB(255, 255, 255, 255),
                  
-                 borderRadius:BorderRadius.circular(999), // Set border width
+                //  borderRadius:BorderRadius.circular(999), // Set border width
                  
-                   ),
-                               child: SvgPicture.asset('assets/images/vector1.svg',width: 10,height: 10,)),
-                             SizedBox(width: 10,),
-                             Text(tel,softWrap: true,overflow: TextOverflow.ellipsis,),
-                           ],
-                         ),),
-                       ],
-                     ),
-                     SizedBox(height: 5,),
+                //    ),
+                //                child: SvgPicture.asset('assets/images/vector1.svg',width: 10,height: 10,)),
+                //              SizedBox(width: 10,),
+                //              Text(tel,softWrap: true,overflow: TextOverflow.ellipsis,),
+                //            ],
+                //          ),),
+                //        ],
+                //      ),
+                //      SizedBox(height: 5,),
                     
-                      if(website !="")
-                     Row(
-                     children: [
-                      InkWell( // Wrap the content in an InkWell
-                         onTap: () {
-                           launch(website); // Launch the URL in a web browser
-                 },
-                       child:Row(
-                       children: [
-                          Container(
-                           // width: 20,
-                           // height: 20,
-                           decoration: BoxDecoration(
+                //       if(website !="")
+                //      Row(
+                //      children: [
+                //       InkWell( // Wrap the content in an InkWell
+                //          onTap: () {
+                //            launch(website); // Launch the URL in a web browser
+                //  },
+                //        child:Row(
+                //        children: [
+                //           Container(
+                //            // width: 20,
+                //            // height: 20,
+                //            decoration: BoxDecoration(
                      
-                         color: Color.fromARGB(255, 255, 255, 255),
+                //          color: Color.fromARGB(255, 255, 255, 255),
                  
-                 borderRadius:BorderRadius.circular(999), // Set border width
+                //  borderRadius:BorderRadius.circular(999), // Set border width
                  
-                   ),
-                           child: SvgPicture.asset('assets/images/vector.svg',width: 10,height: 10,)),
-                         SizedBox(width: 10,),
-                         Text(website,softWrap: true,overflow: TextOverflow.ellipsis,),
-                       ],
-                     )),],),
-                      SizedBox(height: 5,),
-                      if(mobile !="")
-                     Row(
-                       children: [
-                          Container(
-                           // width: 10,
-                           // height: 10,
-                           decoration: BoxDecoration(
+                //    ),
+                //            child: SvgPicture.asset('assets/images/vector.svg',width: 10,height: 10,)),
+                //          SizedBox(width: 10,),
+                //          Text(website,softWrap: true,overflow: TextOverflow.ellipsis,),
+                //        ],
+                //      )),],),
+                //       SizedBox(height: 5,),
+                //       if(mobile !="")
+                //      Row(
+                //        children: [
+                //           Container(
+                //            // width: 10,
+                //            // height: 10,
+                //            decoration: BoxDecoration(
                      
-                         color: Color.fromARGB(255, 255, 255, 255),
+                //          color: Color.fromARGB(255, 255, 255, 255),
                  
-                 borderRadius:BorderRadius.circular(999), // Set border width
+                //  borderRadius:BorderRadius.circular(999), // Set border width
                  
-                   ),
-                           child: SvgPicture.asset('assets/images/vector3.svg',width: 10,height: 10,)),
-                         SizedBox(width: 10,),
-                         Text(mobile,softWrap: true,overflow: TextOverflow.ellipsis,),
-                       ],
-                     ),
-                      SizedBox(height: 5,),
-                       if(email !="")
-                     Row(
-                   children: [
-                     InkWell( // Wrap the content in an InkWell
-                 onTap: () {
-                   launch('mailto:$email'); // Launch email app with recipient
-                 },
-                 child: Row(
-                       children: [
-                          Container(
-                           // width: 20,
-                           // height: 20,
-                           decoration: BoxDecoration(
+                //    ),
+                //            child: SvgPicture.asset('assets/images/vector3.svg',width: 10,height: 10,)),
+                //          SizedBox(width: 10,),
+                //          Text(mobile,softWrap: true,overflow: TextOverflow.ellipsis,),
+                //        ],
+                //      ),
+                //       SizedBox(height: 5,),
+                //        if(email !="")
+                //      Row(
+                //    children: [
+                //      InkWell( // Wrap the content in an InkWell
+                //  onTap: () {
+                //    launch('mailto:$email'); // Launch email app with recipient
+                //  },
+                //  child: Row(
+                //        children: [
+                //           Container(
+                //            // width: 20,
+                //            // height: 20,
+                //            decoration: BoxDecoration(
                      
-                         color: Color.fromARGB(255, 255, 255, 255),
+                //          color: Color.fromARGB(255, 255, 255, 255),
                  
-                 borderRadius:BorderRadius.circular(999), // Set border width
+                //  borderRadius:BorderRadius.circular(999), // Set border width
                  
-                   ),
-                           child: SvgPicture.asset('assets/images/vector2.svg',width: 10,height: 10,)),
-                          SizedBox(width: 10,),
-                         Text(email,softWrap: true,overflow: TextOverflow.ellipsis,),
-                       ],
-                     ),)]),
+                //    ),
+                //            child: SvgPicture.asset('assets/images/vector2.svg',width: 10,height: 10,)),
+                //           SizedBox(width: 10,),
+                //          Text(email,softWrap: true,overflow: TextOverflow.ellipsis,),
+                //        ],
+                //      ),)]),
+                 ContactTemeplete(tel: tel,mobile: mobile,email: email, website: website,),
                       SizedBox(height: 5,),
                      Text('Sector: $sector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
                      SizedBox(height: 5,),
-                      Text('Sub Sector: $subSector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2,),
+                      Text('Sub Sector: $subSector',softWrap: true,overflow: TextOverflow.ellipsis,maxLines: 2),
                      SizedBox(height: 20,),
                  
                  
@@ -519,7 +475,7 @@ class _Transport_listingState extends State<Transport_listing> {
                 //              icon: const Icon(Icons.share),
                 //              onPressed: () async {
                 //                // Replace with your actual sharing logic
-                //                final text = 'Company Name: $name\n Phone: $tel\n Email: $email\n Website: $website\n Fax: $mobile\n';
+                //                final text = 'Company Name: $name\n Phone: $tel\n Email: $email\n Website: $website\n mobile: $mobile\n';
                 //                await Share.share(text);
                 //              },
                 //                       ),

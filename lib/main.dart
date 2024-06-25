@@ -64,7 +64,8 @@ class _MainAppState extends State<MainApp> {
     debugShowCheckedModeBanner: false,
     
     theme: Provider.of<ThemeProvider>(context).themeData,
-     
+      
+      // home:MyHomePage(),
       home:Home(),
      
      routes: routes,

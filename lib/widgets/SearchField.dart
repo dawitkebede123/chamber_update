@@ -101,7 +101,6 @@ class _SearchFieldState extends State<SearchField> {
             
             .orderByChild('Account Name')
 
-            // .equalTo("business")
              .startAt(searchText)
             .endAt(searchText + '\uffff')
             // .startAt(_searchController.text.toUpperCase())
