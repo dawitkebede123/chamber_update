@@ -8,8 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
 // Import additional libraries if needed, like Firebase or form validation
 
-class AddBusinessPage extends StatefulWidget {
-  AddBusinessPage({super.key});
+class EditForm extends StatefulWidget {
+   final Map<dynamic, dynamic> data;
+
+  EditForm({super.key,required this.data});
  
   
 // - Account Name
@@ -27,18 +29,14 @@ class AddBusinessPage extends StatefulWidget {
 // - logo - 
 // - status - business
   @override
-  State<AddBusinessPage> createState() => _AddBusinessPageState();
+  State<EditForm> createState() => _EditFormState();
 }
 
-class _AddBusinessPageState extends State<AddBusinessPage> {
+class _EditFormState extends State<EditForm> {
   bool? _isAdv = false;
     String? _selectedValue = 'business';
-   final accountNameController = TextEditingController();
-  // final categoryController = TextEditingController();
-  final emailController = TextEditingController();
-  final mobileController = TextEditingController();
-  final telController = TextEditingController();
-  final websiteController = TextEditingController();
+    
+ 
   final _formKey = GlobalKey<FormState>(); // For form validation
   // Define form fields and state variables here
   // String _name = '';
@@ -67,10 +65,24 @@ Future<void> addDataToRealTimeDatabase( Map<String, dynamic> data) async {
 
   @override
   Widget build(BuildContext context) {
-  
+    String  name =widget.data["Account Name"].toString();
+    String mobile = widget.data['Mobile'].toString();
+     String tel = widget.data["Tel"].toString();
+    String email = widget.data["Email"].toString();
+    final website = widget.data["Website"];
+    final category = widget.data['Category'];
+    String isAdv = widget.data['Is-adv'];
+    _selectedValue = category;
+    _isAdv = isAdv=='True';
+      final accountNameController = TextEditingController(text: name==null?'':'$name');
+  // final categoryController = TextEditingController();
+  final emailController = TextEditingController(text: email==null?'':'$email');
+  final mobileController = TextEditingController(text: mobile);
+  final telController = TextEditingController(text: tel);
+  final websiteController = TextEditingController(text: website);
     return Scaffold(
       appBar: AppBar(
-         title: const Text('Add Business'),
+         title: const Text('Edit Business'),
       ),
       body: ListView(
         children: [
@@ -81,6 +93,7 @@ Future<void> addDataToRealTimeDatabase( Map<String, dynamic> data) async {
               child: Column(
                 children: [
                   TextFormField(
+                    // initialValue: name,
                     controller: accountNameController,
                     decoration: const InputDecoration(labelText: 'Business Name'),
                            validator: (value) {
@@ -93,24 +106,29 @@ Future<void> addDataToRealTimeDatabase( Map<String, dynamic> data) async {
                     // onSaved: (value) => setState(() => _name = value!),
                   ),
                   TextFormField(
+                    // initialValue: email,
                      controller: emailController,
                     decoration: const InputDecoration(labelText: 'E-mail'),
                  
                     // onSaved: (value) => setState(() => _email = value!),
                   ),
                   TextFormField(
+                    // initialValue:tel,
                      controller: telController,
+                     
                     decoration: const InputDecoration(labelText: 'Office Phone  Number'),
                    
                     // onSaved: (value) => setState(() => _Tel = value!),
                   ),
                    TextFormField(
+                    // initialValue: mobile,
                      controller: mobileController,
                     decoration: const InputDecoration(labelText: 'Mobile  Number'),
                   
                     // onSaved: (value) => setState(() => _Tel = value!),
                   ),
                     TextFormField(
+                      // initialValue: website,
                      controller: websiteController,
                     decoration: const InputDecoration(labelText: 'Website'),
            
@@ -312,38 +330,81 @@ Future<void> addDataToRealTimeDatabase( Map<String, dynamic> data) async {
              
           
                   
-                               ElevatedButton(
-                    onPressed: () async {
-                      // if (_formKey.currentState!.validate()) {
-                        // _formKey.currentState!.save(); // Save form data
-                    
-                        final data = {
-                         'Account Name':accountNameController.text.toUpperCase(),
-                         'Email': emailController.text,
-                         'Tel':telController.text,
-                         'Mobile':mobileController.text,
-                         'Website':websiteController.text,
-                         'Is-adv':'False',
-                         'Image':'',
-                         'Profile':'',
-                         'Sector':'',
-                         'Sub-Sector':'',
-                         'Video':'',
-                         'Category':_selectedValue,
-                         'logo':'',
-                         'status':'',
-                        };
-                         await addDataToRealTimeDatabase(data);
-                          const snackBar = SnackBar(content: Text('added successfully'),
-                    backgroundColor: Colors.red,
-                    
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        Navigator.pop(context); // Close the Add Business page
-                      // }
-                    },
-                    child: const Text('Register Business'),
-                  ),
+                               Row(
+                                 children: [
+                                   ElevatedButton(
+                                                       onPressed: () async {
+                                                         // if (_formKey.currentState!.validate()) {
+                                                           // _formKey.currentState!.save(); // Save form data
+                                                       
+                                                           final data = {
+                                                            'Account Name':accountNameController.text.toUpperCase(),
+                                                            'Email': emailController.text,
+                                                            'Tel':telController.text,
+                                                            'Mobile':mobileController.text,
+                                                            'Website':websiteController.text,
+                                                            'Is-adv':'False',
+                                                            'Image':'',
+                                                            'Profile':'',
+                                                            'Sector':'',
+                                                            'Sub-Sector':'',
+                                                            'Video':'',
+                                                            'Category':_selectedValue,
+                                                            'logo':'',
+                                                            'status':'',
+                                                           };
+                                                            await addDataToRealTimeDatabase(data);
+                                                             const snackBar = SnackBar(content: Text('added successfully'),
+                                                       backgroundColor: Colors.red,
+                                                       
+                                                       );
+                                                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                                           Navigator.pop(context); // Close the Add Business page
+                                                         // }
+                                                       },
+                                                       child: const Text('Edit Business'),
+
+                                                      
+                                                     ),
+                                                     SizedBox(width: 30,),
+                                                     ElevatedButton(
+                                                               style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.red, // Set your desired color here
+    // foregroundColor: Colors.white, // Optional: Set text color
+  ),                                           
+                                                       onPressed: () async {
+                                                         // if (_formKey.currentState!.validate()) {
+                                                           // _formKey.currentState!.save(); // Save form data
+                                                       
+                                                           final data = {
+                                                            'Account Name':accountNameController.text.toUpperCase(),
+                                                            'Email': emailController.text,
+                                                            'Tel':telController.text,
+                                                            'Mobile':mobileController.text,
+                                                            'Website':websiteController.text,
+                                                            'Is-adv':'False',
+                                                            'Image':'',
+                                                            'Profile':'',
+                                                            'Sector':'',
+                                                            'Sub-Sector':'',
+                                                            'Video':'',
+                                                            'Category':_selectedValue,
+                                                            'logo':'',
+                                                            'status':'',
+                                                           };
+                                                            await addDataToRealTimeDatabase(data);
+                                                             const snackBar = SnackBar(content: Text('added successfully'),
+                                                       backgroundColor: Colors.red,
+                                                       
+                                                       );
+                                                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                                           Navigator.pop(context); // Close the Add Business page
+                                                         // }
+                                                       },
+                                                       child: const Text('Delete Business'),
+                                                     ),
+                                 ],
+                               ),
                  
                   ]))),
         ],

@@ -1,4 +1,5 @@
 // import 'package:chamber_of_commerce/MyFavoritesProvider.dart';
+import 'package:chamber_of_commerce/Models/favorite_Item.dart';
 import 'package:chamber_of_commerce/pages/user/Company.dart';
 import 'package:chamber_of_commerce/pages/user/Home.dart';
 import 'package:chamber_of_commerce/theme/MyFavoritesProvider.dart';
@@ -19,10 +20,19 @@ class Favorite extends StatefulWidget {
 }
 
 class _FavoriteState extends State<Favorite> {
-  var data;
+  // var data;
+  final _favoritesBox = Hive.box('newFavorites');
+   List<FavoriteItem> _favorites = [];
+  void initState() {
+    super.initState();
+   _favorites = _favoritesBox.get('newFavorites')?.cast<FavoriteItem>() ?? [];
+
+    // Provider.of<FavoriteListProvider>(context).loadFavorites();
+   
+  }
+
   @override
   void didChangeDependencies() {
-    // Provider.of<FavoriteListProvider>(context).loadFavorites();
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     
@@ -36,6 +46,8 @@ class _FavoriteState extends State<Favorite> {
   // ];
   @override
   Widget build(BuildContext context) {
+    _favoritesBox.put(1, 'dawit');
+    print(_favoritesBox.get(1));
   // data=Provider.of<FavoriteListProvider>(context).loadFavorites();
 
   // print('data $data');
@@ -94,8 +106,11 @@ class _FavoriteState extends State<Favorite> {
           Consumer<FavoriteListProvider>(
           builder: (context, provider, child) {
           // Handle the case where favorites haven't been loaded yet
-
+          //  provider.loadFavorites();
           final favorites = provider.favorites!;
+          // _favorites = 
+          // final favorites = _favorites;
+          // final favorites = _favoritesBox.get(_favorites)?.cast<FavoriteItem>() ?? [];
 
           return ListView.builder(
             itemCount: favorites.length,

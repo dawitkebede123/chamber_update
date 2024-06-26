@@ -36,8 +36,10 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MultiProvider(providers: [
+       
        ChangeNotifierProvider<FavoriteListProvider>(
-          create: (context) => FavoriteListProvider(),
+        
+          create: (context) => FavoriteListProvider()..loadFavorites(),
         ),
         // Add other providers here
        ChangeNotifierProvider<ThemeProvider>( // Replace with your provider class
@@ -65,8 +67,8 @@ class _MainAppState extends State<MainApp> {
     
     theme: Provider.of<ThemeProvider>(context).themeData,
       
-      // home:MyHomePage(),
-      home:Home(),
+      home:MyHomePage(),
+      // home:Home(),
      
      routes: routes,
   
