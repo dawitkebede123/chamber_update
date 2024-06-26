@@ -22,9 +22,10 @@ class _FavoriteState extends State<Favorite> {
   var data;
   @override
   void didChangeDependencies() {
+    // Provider.of<FavoriteListProvider>(context).loadFavorites();
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-  
+    
   }
 
   //   List <Map<String,dynamic>> Companies = [
