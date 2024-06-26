@@ -35,8 +35,9 @@ class _FavoriteState extends State<Favorite> {
   // ];
   @override
   Widget build(BuildContext context) {
-  data=Provider.of<FavoriteListProvider>(context).loadFavorites();
-  print(data);
+  // data=Provider.of<FavoriteListProvider>(context).loadFavorites();
+
+  // print('data $data');
     
      return 
     //  <FavoriteListProvider>(
@@ -90,94 +91,66 @@ class _FavoriteState extends State<Favorite> {
         body:
             
           Consumer<FavoriteListProvider>(
-          builder:(context,provider,child){
-             return ListView.builder(
-              itemCount: provider.favorites.length,
-              itemBuilder: (context, index) {
-         final favorite = provider.favorites[index];
-         final Map<String,dynamic> detail = {
-           "name":favorite.name,
-           "Sub-Sector":favorite.sub_sector,
-           "sector":favorite.sector,
-           "logo":favorite.logo,
-           "profile":favorite.profile,
-           "adv_image":favorite.image,
-           "adv_video":favorite.video,
-           "tel":favorite.tel,
-           "E-mail":favorite.email,
-           "website":favorite.website,
-           "Category":favorite.category,
-           "storage": favorite.storage,
-         };
-          final Map<String,dynamic> detail_business = {
-           "Account Name":favorite.name,
-          //  "Sub-Sector":favorite.sub_sector,
-           "Sector":favorite.sector,
-           "logo":favorite.logo,
-           "Profile":favorite.profile,
-           "Image":favorite.image,
-           "Video":favorite.video,
-           "Tel":favorite.tel,
-           "E-mail":favorite.email,
-           "Web":favorite.website,
-           "Category":favorite.category,
-           "storage": favorite.storage,
-         };
-        //  print(detail);
-                return
-                
-                // Row(
-                //   children: [
-                //     Expanded(
-                //       child: Container(
-                //         padding: const EdgeInsets.all(8.0),
-                //         child: Text('$favorite.name'),
-                //       ),
-                //     ),
-                //     const SizedBox(width: 8.0), // Add spacing between containers
-                //     Expanded(
-                //       child: Container(
-                //         padding: const EdgeInsets.all(2.0),
-                //         child: SvgPicture.asset('assets/images/awash_logo.svg'), // Replace with image widget if available
-                //       ),
-                //     ),
-                //     const SizedBox(width: 8.0), // Add spacing between containers
-                //     Expanded(
-                //       child: Container(
-                //         padding: const EdgeInsets.all(8.0),
-                //         child: SvgPicture.asset('assets/images/trash.svg'), // Replace with additional data widget
-                //       ),
-                //     ),
-                //   ],
-                // );
-                 ListTile(
-                  title: Text(favorite.name),
-                  onTap: (){
-                    // print(favorite.storage);
-                    if(favorite.storage == "online"){
-                   Navigator.push(
-              context,
-               TransparentRoute(
-               
-                page:  CompanyDescription(detail: detail_business,),
-              ),
-            );
-                    }
-                    else{
-                  Navigator.push(
-              context,
-               TransparentRoute(
-               
-                page:  Company(detail: detail,),
-              ),
-            );
-                    };
-                    
-                  },
-                  trailing: IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () => provider.removeFromFavorites(favorite),
-                  ),
+          builder: (context, provider, child) {
+          // Handle the case where favorites haven't been loaded yet
+
+          final favorites = provider.favorites!;
+
+          return ListView.builder(
+            itemCount: favorites.length,
+            itemBuilder: (context, index) {
+              final favorite = favorites[index];
+              final Map<String, dynamic> detail = {
+                "name": favorite.name,
+                "Sub-Sector": favorite.sub_sector,
+                "sector": favorite.sector,
+                "logo": favorite.logo,
+                "profile": favorite.profile,
+                "adv_image": favorite.image,
+                "adv_video": favorite.video,
+                "tel": favorite.tel,
+                "E-mail": favorite.email,
+                "website": favorite.website,
+                "Category": favorite.category,
+                "storage": favorite.storage,
+              };
+              final Map<String, dynamic> detail_business = {
+                "Account Name": favorite.name,
+                "Sector": favorite.sector,
+                "logo": favorite.logo,
+                "Profile": favorite.profile,
+                "Image": favorite.image,
+                "Video": favorite.video,
+                "Tel": favorite.tel,
+                "E-mail": favorite.email,
+                "Web": favorite.website,
+                "Category": favorite.category,
+                "storage": favorite.storage,
+              };
+
+              return ListTile(
+                title: Text(favorite.name),
+                onTap: () {
+                  if (favorite.storage == "online") {
+                    Navigator.push(
+                      context,
+                      TransparentRoute(
+                        page: CompanyDescription(detail: detail_business),
+                      ),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      TransparentRoute(
+                        page: Company(detail: detail),
+                      ),
+                    );
+                  }
+                },
+                trailing: IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () => provider.removeFromFavorites(favorite),
+                ),
                 );
               },
              
