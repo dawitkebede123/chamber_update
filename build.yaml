@@ -1,2 +1,12 @@
-generate: |
-              build/generated/
+targets:
+  $default:
+    builders:
+      hive_generator|hive_builder:
+        enabled: true
+        options:
+          # Specify the output directory for generated files (optional).
+          # By default, it's 'lib/'.
+          output_dir: lib/hive_generated
+
+# You can customize other build settings if needed.
+# For example, specifying additional sources or dependencies.

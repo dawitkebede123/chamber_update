@@ -2,6 +2,7 @@
 
 // import 'package:chamber_of_commerce/add.dart';
 // import 'package:chamber_of_commerce/detail.dart';
+import 'package:chamber_of_commerce/Models/favorite_Item.dart';
 import 'package:chamber_of_commerce/firebase_options.dart';
 import 'package:chamber_of_commerce/navigation.dart';
 import 'package:chamber_of_commerce/pages/admin/adminHome.dart';
@@ -28,9 +29,9 @@ import 'package:provider/provider.dart';
 Future<void> main() async {
   await Hive.initFlutter();
   // Hive.registerAdapter(FavoriteAdapter());
-  // Hive.registerAdapter(BillingAccountAdapter());
-  // Hive.registerAdapter(NotificationModelAdapter());
-  // Hive.registerAdapter(FrequentlyUsedModelAdapter());
+ 
+  Box<FavoriteItem> favoriteItemsBox = await Hive.openBox<FavoriteItem>('newFavorites');
+
   await Hive.openBox('newFavorites');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
