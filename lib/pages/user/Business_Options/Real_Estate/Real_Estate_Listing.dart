@@ -412,6 +412,7 @@ class _Real_Estate_listingState extends State<Real_Estate_listing> {
          final website = businessData["Website"];
          final sector = businessData["Sector"];
          final subSector = businessData["Sub-Sector"];
+         bool isAdv = businessData["Is-adv"]=='True';
        
          // Extract business information based on your data structure
          return Padding(
@@ -430,7 +431,7 @@ class _Real_Estate_listingState extends State<Real_Estate_listing> {
                   
                     decoration: BoxDecoration(
                      
-                         color: const Color.fromARGB(255,229,234,232),
+                         color:isAdv?Color.fromARGB(255, 112, 224, 179):const Color.fromARGB(255,229,234,232),
                  
                  borderRadius:BorderRadius.circular(20), // Set border width
                  

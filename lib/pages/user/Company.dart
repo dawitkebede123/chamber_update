@@ -14,6 +14,7 @@ import 'package:chamber_of_commerce/theme/MyFavoritesProvider.dart';
 import 'package:chamber_of_commerce/widgets/ContactTemplete.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mime/mime.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -57,7 +58,9 @@ Future<String> storeVideoInFirebase(String fileName) async {
 class _CompanyState extends State<Company> {
   @override
   Widget build(BuildContext context) {
-     final provider = Provider.of<FavoriteListProvider>(context);
+                final newFavoritesBox = Provider.of<Box<FavoriteItem>>(context);
+
+    //  final provider = Provider.of<FavoriteListProvider>(context);
 
     String sector = widget.detail["sector"].toString();
     String  name =widget.detail["name"].toString();
@@ -172,15 +175,16 @@ class _CompanyState extends State<Company> {
         centerTitle: true,
       ),
       
-      body:  ValueListenableBuilder(
-        valueListenable: Hive.box('newFavorites').listenable(),
-        builder:(context,box,child){
+      body:  
+      // ValueListenableBuilder(
+      //   valueListenable: Hive.box('newFavorites').listenable(),
+      //   builder:(context,box,child){
         // final isFavorite = provider.isFavorite(widget.detail.);
         // final isFavorite =
         //  checkFavoriteExists(name, FavoriteItem)
-               final isFavorite = provider.isFavorite(name);
+              //  final isFavorite = provider.isFavorite(name);
           // print(isFavorite);
-        return ListView(
+         ListView(
          children: [ 
           
            Padding(
@@ -250,9 +254,9 @@ class _CompanyState extends State<Company> {
                 // }
                 // else{
 
-
-                provider.addToFavorites(arg);
-            
+                // provider.addToFavorites(arg);
+                    newFavoritesBox.add(arg);
+           
                 // await box.put(name,video);
                 const snackBar = SnackBar(content: Text('added successfully'),
                 backgroundColor: Colors.red,
@@ -263,8 +267,8 @@ class _CompanyState extends State<Company> {
                
               },
               
-               icon:  Icon(
-               isFavorite?  Icons.favorite:Icons.favorite_border,
+               icon:  const Icon(
+               Icons.favorite_border,
                color: Colors.red,))
             ],),
           ),
@@ -344,7 +348,7 @@ class _CompanyState extends State<Company> {
           Padding(
             padding: const EdgeInsets.only(left: 20,right: 20,bottom: 16),
             child: Container(
-             child:Image.asset(image),
+             child: InteractiveViewer(child: Image.asset(image)),
             ),
           ),
 
@@ -477,8 +481,9 @@ class _CompanyState extends State<Company> {
                          
                   //  SizedBox(height: 10,),
                    
-         ]);}
-      ), 
+         ]),
+      //    }
+      // ), 
         
         //  bottomNavigationBar:const CustomeButtomNavBar(index: 3,),
   

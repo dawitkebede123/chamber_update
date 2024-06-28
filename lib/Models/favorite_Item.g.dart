@@ -17,7 +17,7 @@ class FavoriteAdapter extends TypeAdapter<FavoriteItem> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return FavoriteItem(
-      name: fields[0] as String,
+      name: fields[0] as String?,
       logo: fields[1] as String?,
       image: fields[2] as String?,
       video: fields[3] as String?,
@@ -29,13 +29,14 @@ class FavoriteAdapter extends TypeAdapter<FavoriteItem> {
       email: fields[9] as String?,
       category: fields[11] as String?,
       website: fields[10] as String?,
+      storage: fields[12] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, FavoriteItem obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -59,7 +60,9 @@ class FavoriteAdapter extends TypeAdapter<FavoriteItem> {
       ..writeByte(10)
       ..write(obj.website)
       ..writeByte(11)
-      ..write(obj.category);
+      ..write(obj.category)
+      ..writeByte(12)
+      ..write(obj.storage);
   }
 
   @override

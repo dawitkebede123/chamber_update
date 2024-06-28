@@ -10,7 +10,9 @@ import 'package:chamber_of_commerce/pages/user/Almanac_Options/MicroFinance_Opti
 import 'package:chamber_of_commerce/pages/user/Almanac_Options/Capital_Goods_Options.dart';
 import 'package:chamber_of_commerce/theme/MyFavoritesProvider.dart';
 import 'package:chamber_of_commerce/widgets/ContactTemplete.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:chamber_of_commerce/pages/user/Home.dart';
@@ -92,9 +94,29 @@ class _CompanyDescriptionState extends State<CompanyDescription> {
     return ''; // Or throw an exception for further handling
   }
 }  
+ List<dynamic> _mapSnapshotToCompanyList(DataSnapshot snapshot) {
+    // Handle both Map and List data structures
+    if (snapshot.value is Map) {
+      final Map<dynamic, dynamic> entries = Map.from(snapshot.value as Map);
+      final List<dynamic> companies = [];
+      entries.forEach((key, value) {
+        companies.add(value);
+      });
+      return companies;
+    } else if (snapshot.value is List) {
+      return snapshot.value as List<dynamic>; // Assuming each item in the list represents a company
+    } else {
+      print('Unexpected data type received: ${snapshot.value}');
+      return []; // Empty list if unexpected data type
+    }
+  }
   @override
   Widget build(BuildContext context) {
-     final provider = Provider.of<FavoriteListProvider>(context);
+
+     List<dynamic> data = [];
+     List<Map<dynamic, dynamic>> uniqueData = [];
+     final newFavoritesBox = Provider.of<Box<FavoriteItem>>(context);
+    //  final provider = Provider.of<FavoriteListProvider>(context);
 
     // String sector = widget.detail["sector"].toString();
     String  name =widget.detail['Account Name'].toString();
@@ -105,20 +127,37 @@ class _CompanyDescriptionState extends State<CompanyDescription> {
     // print(image);
     String video = widget.detail["Video"];
     String tel = widget.detail["Tel"].toString();
+    String mobile = widget.detail["Mobile"].toString();
     String email = widget.detail["Email"].toString();
     String profile = widget.detail["Profile"].toString();
     final website = widget.detail["Website"];
-    final sector = widget.detail["Sector"];
-    final sub_sector = widget.detail["Sub-Sector"];
+    // final sector = widget.detail["Sector"];
+    // final sub_sector = widget.detail["Sub-Sector"];
     // final sub_sector = widget.detail["Sub-Sector"];
     final category = widget.detail["Category"];
     final storage = widget.detail["storage"];
-    final arg= FavoriteItem( sector: sector, name: name,logo: logo,profile: profile,image: image, video: video,tel: tel,email: email,website: website,category: category,storage: storage);
+    final arg= FavoriteItem(  name: name,logo: logo,profile: profile,image: image, video: video,tel: tel,email: email,website: website,category: category,storage: storage);
     // String fax = widget.detail["fax"].toString();
      Future<String> imageUrlFuture = storeImageInFirebase(image);
      Future<String> imageUrlFutureGif = storeVideoInFirebase(video);
      Future<String> logoUrlFuture = storeLogoInFirebase(logo);
     Future<String> videoUrlFuture = storeVideoInFirebase(video);
+
+    //get the multiple sector and sub sector
+    final data_stream = FirebaseDatabase.instance
+            .ref('Query10')
+            
+            .orderByChild('Account Name')
+            // .equalTo("business")
+            
+             .startAt(name)
+            .endAt(name + '\uffff')
+            // .startAt(_searchController.text.toUpperCase())
+            // .endAt(_searchController.text.toLowerCase() + '\uffff')
+            .limitToFirst(15)
+            .onValue
+            .asBroadcastStream()
+            .map((event) => _mapSnapshotToCompanyList(event.snapshot));
     var scaffold = Scaffold(
     //   appBar: AppBar(
     //           backgroundColor: Theme.of(context).colorScheme.background,
@@ -160,11 +199,12 @@ class _CompanyDescriptionState extends State<CompanyDescription> {
 
 
 
-      body:ValueListenableBuilder(
-        valueListenable: Hive.box('newFavorites').listenable(),
-         builder:(context,box,child){
-             final isFavorite = provider.isFavorite(name);
-        return ListView(
+      body:
+      // ValueListenableBuilder(
+      //   valueListenable: Hive.box('newFavorites').listenable(),
+      //    builder:(context,box,child){
+            //  final isFavorite = provider.isFavorite(name);
+        ListView(
          children: [ 
            Padding(
              padding: const EdgeInsets.only(left: 20.0,right: 20,top: 4),
@@ -228,6 +268,7 @@ class _CompanyDescriptionState extends State<CompanyDescription> {
           Row(children: [
               Spacer(),
               IconButton(onPressed: () async{
+                newFavoritesBox.add(arg);
                 ScaffoldMessenger.of(context).clearSnackBars();
                 // if(isFavorite){
                 //   //  Provider.of<ThemeProvider>(context,listen: false).toggleTheme(),
@@ -243,7 +284,7 @@ class _CompanyDescriptionState extends State<CompanyDescription> {
                   
                 // }
                 // else{
-                provider.addToFavorites(arg);
+                // provider.addToFavorites(arg);
         
                 // await box.put(name,video);
                 const snackBar = SnackBar(content: Text('added successfully'),
@@ -255,8 +296,8 @@ class _CompanyDescriptionState extends State<CompanyDescription> {
                
               },
               
-               icon:  Icon(
-               isFavorite?  Icons.favorite:Icons.favorite_border,
+               icon:  const Icon(
+               Icons.favorite_border,
                color: Colors.red,))
             ],),
           SizedBox(height: 20,),
@@ -334,7 +375,7 @@ class _CompanyDescriptionState extends State<CompanyDescription> {
             future: imageUrlFuture,
             builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return Image.network(snapshot.data!); 
+          return InteractiveViewer(child: Image.network(snapshot.data!)); 
           // print("test");// Use the downloaded URL
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}'); // Handle errors
@@ -347,21 +388,58 @@ class _CompanyDescriptionState extends State<CompanyDescription> {
         
             ),
           ),
-          Padding(padding: EdgeInsets.only(left: 20,right: 20),
-          child: Column(
-            children: [
-        
-          Text("Sector: $sector",textAlign: TextAlign.start,maxLines: 2,), 
-           Text("Sub Sector: $sub_sector",textAlign: TextAlign.start,maxLines: 2,), 
-          
-          
-          // Row(
-          //   children: [
-          //     Text("Sub Sector: $sub_sector",textAlign: TextAlign.start,),
-          //   ],
-          // ),
-            ],
-          ),
+           Padding(padding: EdgeInsets.only(left: 20,right: 20),
+          child: StreamBuilder<List<dynamic>>(
+      stream: data_stream,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+          // print(snapshot.data);
+          data = snapshot.data?? [];
+          // Set<String> seenKeys = {}; // Set to store unique combinations of relevant keys
+
+// for (final element in data) {
+//   // Define the key(s) to compare for uniqueness (e.g., "name" and "age")
+//   final keyCombination = "${element["Account Name"]}"; 
+
+//   if (!seenKeys.contains(keyCombination)) {
+//     seenKeys.add(keyCombination);
+//     uniqueData.add(element);
+//   }
+// }
+        return Container(
+          height: 200.0,
+          // width: 200,
+          child: ListView.builder(
+      
+      itemCount: data.length,
+      itemBuilder: (context, index) {
+
+        final company = data[index];
+        int position = index +1;
+    // print(company['Sector $position']);
+    //  print(company['Sub-Sector $position']);
+
+        final sector = company['Sector'];
+        final sub_sector = company["Sub-Sector"];
+
+        return Column(
+          children: [
+            Text("Sector",style: TextStyle(fontWeight: FontWeight.bold),),
+            Text(" $sector"),
+            Text("Sub sector",style:TextStyle(fontWeight: FontWeight.bold)),
+            Text(" $sub_sector"),
+          ],
+        );
+      },
+    ),
+        );
+      },
+    ),
           ),
          SizedBox(height: 20,),
           if(profile !="")
@@ -373,7 +451,7 @@ class _CompanyDescriptionState extends State<CompanyDescription> {
                         child: Container(child: Text(profile,textAlign: TextAlign.justify,style: TextStyle(fontSize: 14))),
              )
              ),
-           ContactTemeplete(tel: tel,website:website,email: email,)        
+           ContactTemeplete(tel: tel,mobile: mobile,website:website,email: email,)        
           //  if(tel !="")
           //                Padding(
           //                  padding: const EdgeInsets.only(left: 20.0,right: 20),
@@ -469,8 +547,8 @@ class _CompanyDescriptionState extends State<CompanyDescription> {
                         //  ),
                   //  SizedBox(height: 10,),
                   
-         ]);}
-      ), 
+         ]),
+      
         
         //  bottomNavigationBar:const CustomeButtomNavBar(index: 3,),
   

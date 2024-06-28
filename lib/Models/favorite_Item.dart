@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 part 'favorite_Item.g.dart';
 @HiveType(typeId: 0,adapterName: 'FavoriteAdapter') // You can change the typeId if needed
 class FavoriteItem {
   // Your model fields
   @HiveField(0)
-  final String name;
+  final String? name;
    @HiveField(1)
   final String? logo;
    @HiveField(2)
@@ -27,9 +28,11 @@ class FavoriteItem {
   final String? website; // nullable for optional website field
    @HiveField(11)
   final String? category;
+   @HiveField(12)
+  final String? storage;
 
   FavoriteItem({
-    required this.name,
+    this.name,
      this.logo,
     this.image,
     this.video,
@@ -38,8 +41,9 @@ class FavoriteItem {
     this.profile,
    this.tel,
    this.mobile,
-     this.email,
+    this.email,
     this.category,
     this.website,
+    this.storage,
   });
 }

@@ -94,7 +94,8 @@ class _CompanyDescriptionState extends State<CompanyDescriptionAlmanac> {
 }  
   @override
   Widget build(BuildContext context) {
-     final provider = Provider.of<FavoriteListProvider>(context);
+     final newFavoritesBox = Provider.of<Box<FavoriteItem>>(context);
+    //  final provider = Provider.of<FavoriteListProvider>(context);
 
     // String sector = widget.detail["sector"].toString();
     String  name =widget.detail['Account Name'];
@@ -161,11 +162,12 @@ class _CompanyDescriptionState extends State<CompanyDescriptionAlmanac> {
 
 
 
-      body:ValueListenableBuilder(
-        valueListenable: Hive.box('newFavorites').listenable(),
-         builder:(context,box,child){
-             final isFavorite = provider.isFavorite(name);
-        return ListView(
+      body:
+      // ValueListenableBuilder(
+      //   valueListenable: Hive.box('newFavorites').listenable(),
+      //    builder:(context,box,child){
+      //        final isFavorite = provider.isFavorite(name);
+         ListView(
          children: [ 
            Padding(
              padding: const EdgeInsets.only(left: 20.0,right: 20,top: 4),
@@ -244,7 +246,8 @@ class _CompanyDescriptionState extends State<CompanyDescriptionAlmanac> {
                   
                 // }
                 // else{
-                provider.addToFavorites(arg);
+                 newFavoritesBox.add(arg);
+                // provider.addToFavorites(arg);
         
                 // await box.put(name,video);
                 const snackBar = SnackBar(content: Text('added successfully'),
@@ -256,8 +259,8 @@ class _CompanyDescriptionState extends State<CompanyDescriptionAlmanac> {
                
               },
               
-               icon:  Icon(
-               isFavorite?  Icons.favorite:Icons.favorite_border,
+               icon:  const Icon(
+               Icons.favorite_border,
                color: Colors.red,))
             ],),
           SizedBox(height: 20,),
@@ -472,8 +475,9 @@ class _CompanyDescriptionState extends State<CompanyDescriptionAlmanac> {
                         //  ),
                   //  SizedBox(height: 10,),
                   
-         ]);}
-      ), 
+         ]),
+      //    }
+      // ), 
         
         //  bottomNavigationBar:const CustomeButtomNavBar(index: 3,),
   

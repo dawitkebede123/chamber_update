@@ -53,12 +53,14 @@ class _SearchFieldState extends State<SearchField> {
           data = [];
         uniqueBusinesses = [];
         final searchText = _searchController.text.toUpperCase();
+        //  final searchPrefix = searchText.substring(0, 3).toUpperCase();
       // _searchResultsStream = Stream.multi((_) {
          final business_stream = FirebaseDatabase.instance
             .ref('Query10')
             
             .orderByChild('Account Name')
             // .equalTo("business")
+            
              .startAt(searchText)
             .endAt(searchText + '\uffff')
             // .startAt(_searchController.text.toUpperCase())

@@ -20,12 +20,13 @@ class Favorite extends StatefulWidget {
 }
 
 class _FavoriteState extends State<Favorite> {
+
   // var data;
-  final _favoritesBox = Hive.box('newFavorites');
-   List<FavoriteItem> _favorites = [];
+  // final _favoritesBox = Hive.box('newFavorites');
+  //  List<FavoriteItem> _favorites = [];
   void initState() {
     super.initState();
-   _favorites = _favoritesBox.get('newFavorites')?.cast<FavoriteItem>() ?? [];
+  //  _favorites = _favoritesBox.get('newFavorites')?.cast<FavoriteItem>() ?? [];
 
     // Provider.of<FavoriteListProvider>(context).loadFavorites();
    
@@ -46,8 +47,10 @@ class _FavoriteState extends State<Favorite> {
   // ];
   @override
   Widget build(BuildContext context) {
-    _favoritesBox.put(1, 'dawit');
-    print(_favoritesBox.get(1));
+  final newFavoritesBox = Provider.of<Box<FavoriteItem>>(context);
+
+    // _favoritesBox.put(1, 'dawit');
+    // print(_favoritesBox.get(1));
   // data=Provider.of<FavoriteListProvider>(context).loadFavorites();
 
   // print('data $data');
@@ -102,52 +105,59 @@ class _FavoriteState extends State<Favorite> {
         ),
         
         body:
-            
-          Consumer<FavoriteListProvider>(
-          builder: (context, provider, child) {
+
+            ValueListenableBuilder(
+        valueListenable: newFavoritesBox.listenable(),
+        builder: (context, Box<FavoriteItem> box, _) {
+          if (box.values.isEmpty) {
+            return Center(child: Text('No favorites added yet.'));
+          } 
+          // Consumer<FavoriteListProvider>(
+          // builder: (context, provider, child) {
           // Handle the case where favorites haven't been loaded yet
           //  provider.loadFavorites();
-          final favorites = provider.favorites!;
+          // final favorites = provider.favorites!;
           // _favorites = 
           // final favorites = _favorites;
           // final favorites = _favoritesBox.get(_favorites)?.cast<FavoriteItem>() ?? [];
 
           return ListView.builder(
-            itemCount: favorites.length,
+            itemCount: box.length,
             itemBuilder: (context, index) {
-              final favorite = favorites[index];
+              final favorite = box.getAt(index);
+              String? name = favorite?.name;
               final Map<String, dynamic> detail = {
-                "name": favorite.name,
-                "Sub-Sector": favorite.sub_sector,
-                "sector": favorite.sector,
-                "logo": favorite.logo,
-                "profile": favorite.profile,
-                "adv_image": favorite.image,
-                "adv_video": favorite.video,
-                "tel": favorite.tel,
-                "E-mail": favorite.email,
-                "website": favorite.website,
-                "Category": favorite.category,
-                "storage": favorite.storage,
+                "name": favorite?.name,
+                "Sub-Sector": favorite?.sub_sector,
+                "sector": favorite?.sector,
+                "logo": favorite?.logo,
+                "profile": favorite?.profile,
+                "adv_image": favorite?.image,
+                "adv_video": favorite?.video,
+                "tel": favorite?.tel,
+                "E-mail": favorite?.email,
+                "website": favorite?.website,
+                "Category": favorite?.category,
+                "storage": favorite?.storage,
               };
               final Map<String, dynamic> detail_business = {
-                "Account Name": favorite.name,
-                "Sector": favorite.sector,
-                "logo": favorite.logo,
-                "Profile": favorite.profile,
-                "Image": favorite.image,
-                "Video": favorite.video,
-                "Tel": favorite.tel,
-                "E-mail": favorite.email,
-                "Web": favorite.website,
-                "Category": favorite.category,
-                "storage": favorite.storage,
+                "Account Name": favorite?.name,
+                "Sector": favorite?.sector,
+                "logo": favorite?.logo,
+                "Profile": favorite?.profile,
+                "Image": favorite?.image,
+                "Video": favorite?.video,
+                "Tel": favorite?.tel,
+                "E-mail": favorite?.email,
+                "Web": favorite?.website,
+                "Category": favorite?.category,
+                "storage": favorite?.storage,
               };
-
+             
               return ListTile(
-                title: Text(favorite.name),
+                title: Text(name != null?name:''),
                 onTap: () {
-                  if (favorite.storage == "online") {
+                  if (favorite?.storage == "online") {
                     Navigator.push(
                       context,
                       TransparentRoute(
@@ -165,7 +175,8 @@ class _FavoriteState extends State<Favorite> {
                 },
                 trailing: IconButton(
                   icon: Icon(Icons.delete),
-                  onPressed: () => provider.removeFromFavorites(favorite),
+                  onPressed: () => box.delete(index)
+                  //  provider.removeFromFavorites(favorite),
                 ),
                 );
               },

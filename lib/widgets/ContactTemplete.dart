@@ -18,7 +18,9 @@ class _ContactTemepleteState extends State<ContactTemeplete> {
   @override
   Widget build(BuildContext context) {
   String tel = widget.tel;
+  tel = tel.split("/")[0];
   String mobile = widget.mobile;
+  mobile = mobile.split("/")[0];
   String website = widget.website;
   String email = widget.email;
   

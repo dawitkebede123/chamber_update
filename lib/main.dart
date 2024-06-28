@@ -28,16 +28,16 @@ import 'package:provider/provider.dart';
 // Assuming you have initialized Firebase in your main function
 Future<void> main() async {
   await Hive.initFlutter();
-  // Hive.registerAdapter(FavoriteAdapter());
- 
-  Box<FavoriteItem> favoriteItemsBox = await Hive.openBox<FavoriteItem>('newFavorites');
+  Hive.registerAdapter(FavoriteAdapter());
+  var updateFavoritesBox = await Hive.openBox<FavoriteItem>('updateFavorites');
+  // Box<FavoriteItem> favoriteItemsBox = await Hive.openBox<FavoriteItem>('newFavorites');
 
-  await Hive.openBox('newFavorites');
+  // await Hive.openBox('newFavorites');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MultiProvider(providers: [
-       
+        Provider<Box<FavoriteItem>>.value(value:updateFavoritesBox ) ,
        ChangeNotifierProvider<FavoriteListProvider>(
         
           create: (context) => FavoriteListProvider()..loadFavorites(),
@@ -46,13 +46,16 @@ Future<void> main() async {
        ChangeNotifierProvider<ThemeProvider>( // Replace with your provider class
           create: (context) => ThemeProvider(),
         ),
+       
     ],
-  //    ChangeNotifierProvider(
-  // create: (context) => ThemeProvider(), // Replace with your provider
-  child: const MainApp()));
+  
+  child:  MainApp()
+  
+  ));
 }
 
 class MainApp extends StatefulWidget {
+  // final Box<FavoriteItem> newFavoritesBox;
   const MainApp({super.key});
 
   @override
@@ -68,8 +71,8 @@ class _MainAppState extends State<MainApp> {
     
     theme: Provider.of<ThemeProvider>(context).themeData,
       
-      home:MyHomePage(),
-      // home:Home(),
+      // home:MyHomePage(),
+      home:Home(),
      
      routes: routes,
   
