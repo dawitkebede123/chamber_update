@@ -56,12 +56,59 @@ Future<String> storeVideoInFirebase(String fileName) async {
   }
 }  
 class _CompanyState extends State<Company> {
+
+    bool isFavorite = false;
+
   @override
   Widget build(BuildContext context) {
+
+
+    Future<void> checkFavorite( String? targetValue) async {
+  final newFavoritesBox = Provider.of<Box<FavoriteItem>>(context);
+  // var box = await Hive.openBox(boxName);
+    //  final _favoritesBox = Hive.box('newFavorites');
+
+  // await _favoritesBox.(() async {
+    for (var key in newFavoritesBox.keys) {
+      if (newFavoritesBox.get(key)!.name == targetValue) {
+        // await newFavoritesBox.delete(key);
+        isFavorite = true;
+      }
+    }
+  // }
+  // );
+}
+Future<void> addByValue( String? targetValue) async {
+   final newFavoritesBox = Provider.of<Box<FavoriteItem>>(context);
+  // var box = await Hive.openBox(boxName);
+    //  final _favoritesBox = Hive.box('newFavorites');
+
+  // await _favoritesBox.(() async {
+    for (var key in newFavoritesBox.keys) {
+      if (newFavoritesBox.get(key)!.name == targetValue) {
+        await newFavoritesBox.add(key);
+      }
+    }
+  // }
+  // );
+}
+Future<void> deleteByValue( String? targetValue) async {
+   final newFavoritesBox = Provider.of<Box<FavoriteItem>>(context);
+  // var box = await Hive.openBox(boxName);
+    //  final _favoritesBox = Hive.box('newFavorites');
+
+  // await _favoritesBox.(() async {
+    for (var key in newFavoritesBox.keys) {
+      if (newFavoritesBox.get(key)!.name == targetValue) {
+        await newFavoritesBox.delete(key);
+      }
+    }
+  // }
+  // );
+}
                 final newFavoritesBox = Provider.of<Box<FavoriteItem>>(context);
 
     //  final provider = Provider.of<FavoriteListProvider>(context);
-
     String sector = widget.detail["sector"].toString();
     String  name =widget.detail["name"].toString();
     String logo = widget.detail["logo"].toString();
@@ -75,6 +122,9 @@ class _CompanyState extends State<Company> {
      Future<String> videoUrlFuture = storeVideoInFirebase(video);
     // String fax = widget.detail["fax"].toString();
     final arg= FavoriteItem(sector: sector,name: name,logo: logo,profile: profile,image: image, video: video,tel: tel,email: email,website: website);
+   
+                checkFavorite(name);
+   
     var scaffold = Scaffold(
       //  drawer:const BackButton(
       //   //  backgroundColor: Colors.white,
@@ -237,14 +287,16 @@ class _CompanyState extends State<Company> {
             padding: const EdgeInsets.only(left: 20.0,right: 20),
             child: Row(children: [
               Spacer(),
+               
               IconButton(onPressed: () async{
                 ScaffoldMessenger.of(context).clearSnackBars();
-                // if(isFavorite){
+                // isFavorite = isFavorite == true;
+                // if(isFavorite == true){
                 //   //  Provider.of<ThemeProvider>(context,listen: false).toggleTheme(),
-                //  provider.removeFromFavorites(arg);
+                // //  provider.removeFromFavorites(arg);
                 //   // provider.removeFromFavorites
                 //   // box.delete(name);
-            
+                //     deleteByValue(name);
                 //  const snackBar = SnackBar(content: Text('Remove successfully'),
                 // backgroundColor: Colors.blue,
             
@@ -252,10 +304,8 @@ class _CompanyState extends State<Company> {
                 // ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   
                 // }
-                // else{
-
-                // provider.addToFavorites(arg);
-                    newFavoritesBox.add(arg);
+              //  else{
+                  newFavoritesBox.add(arg);
            
                 // await box.put(name,video);
                 const snackBar = SnackBar(content: Text('added successfully'),
@@ -263,12 +313,16 @@ class _CompanyState extends State<Company> {
                 
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              //  }
+
+                // provider.addToFavorites(arg);
+                   
                 // }
                
               },
               
-               icon:  const Icon(
-               Icons.favorite_border,
+               icon:   Icon(
+              isFavorite?Icons.favorite: Icons.favorite_border,
                color: Colors.red,))
             ],),
           ),
@@ -507,4 +561,6 @@ class _CompanyState extends State<Company> {
   }
   return null; // Error or non-video content
 }
+
+
 }

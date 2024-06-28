@@ -38,6 +38,8 @@ class CompanyDescription extends StatefulWidget {
 }
 
 class _CompanyDescriptionState extends State<CompanyDescription> {
+
+  
    Future<String> storeImageInFirebase(String fileName) async {
   try {
     final storage  = FirebaseStorage.instance.ref();
@@ -110,8 +112,53 @@ class _CompanyDescriptionState extends State<CompanyDescription> {
       return []; // Empty list if unexpected data type
     }
   }
+  bool isFavorite = false;
+
   @override
   Widget build(BuildContext context) {
+  Future<void> checkFavorite( String? targetValue) async {
+  final newFavoritesBox = Provider.of<Box<FavoriteItem>>(context);
+  // var box = await Hive.openBox(boxName);
+    //  final _favoritesBox = Hive.box('newFavorites');
+
+  // await _favoritesBox.(() async {
+    for (var key in newFavoritesBox.keys) {
+      if (newFavoritesBox.get(key)!.name == targetValue) {
+        // await newFavoritesBox.delete(key);
+        isFavorite = true;
+      }
+    }
+  // }
+  // );
+}
+Future<void> addByValue( String? targetValue) async {
+   final newFavoritesBox = Provider.of<Box<FavoriteItem>>(context);
+  // var box = await Hive.openBox(boxName);
+    //  final _favoritesBox = Hive.box('newFavorites');
+
+  // await _favoritesBox.(() async {
+    for (var key in newFavoritesBox.keys) {
+      if (newFavoritesBox.get(key)!.name == targetValue) {
+        await newFavoritesBox.add(key);
+      }
+    }
+  // }
+  // );
+}
+Future<void> deleteByValue( String? targetValue) async {
+   final newFavoritesBox = Provider.of<Box<FavoriteItem>>(context);
+  // var box = await Hive.openBox(boxName);
+    //  final _favoritesBox = Hive.box('newFavorites');
+
+  // await _favoritesBox.(() async {
+    for (var key in newFavoritesBox.keys) {
+      if (newFavoritesBox.get(key)!.name == targetValue) {
+        await newFavoritesBox.delete(key);
+      }
+    }
+  // }
+  // );
+}
 
      List<dynamic> data = [];
      List<Map<dynamic, dynamic>> uniqueData = [];
@@ -237,6 +284,7 @@ class _CompanyDescriptionState extends State<CompanyDescription> {
                                      builder: (context, snapshot) {
                                        if (snapshot.hasData) {
                                          return Image.network(snapshot.data!); 
+                                        // return Image.asset(logo);
                                          // print("test");// Use the downloaded URL
                                        } else if (snapshot.hasError) {
                                          return Text('Error: ${snapshot.error}'); // Handle errors
@@ -375,7 +423,7 @@ class _CompanyDescriptionState extends State<CompanyDescription> {
             future: imageUrlFuture,
             builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return InteractiveViewer(child: Image.network(snapshot.data!)); 
+          return InteractiveViewer(child: Image.asset('assets/images/business_adv/$image')); 
           // print("test");// Use the downloaded URL
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}'); // Handle errors

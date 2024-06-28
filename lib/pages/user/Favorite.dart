@@ -31,6 +31,7 @@ class _FavoriteState extends State<Favorite> {
     // Provider.of<FavoriteListProvider>(context).loadFavorites();
    
   }
+// ignore: non_constant_identifier_names
 
   @override
   void didChangeDependencies() {
@@ -49,6 +50,19 @@ class _FavoriteState extends State<Favorite> {
   Widget build(BuildContext context) {
   final newFavoritesBox = Provider.of<Box<FavoriteItem>>(context);
 
+Future<void> deleteByValue( String? targetValue) async {
+  // var box = await Hive.openBox(boxName);
+    //  final _favoritesBox = Hive.box('newFavorites');
+
+  // await _favoritesBox.(() async {
+    for (var key in newFavoritesBox.keys) {
+      if (newFavoritesBox.get(key)!.name == targetValue) {
+        await newFavoritesBox.delete(key);
+      }
+    }
+  // }
+  // );
+}
     // _favoritesBox.put(1, 'dawit');
     // print(_favoritesBox.get(1));
   // data=Provider.of<FavoriteListProvider>(context).loadFavorites();
@@ -161,7 +175,7 @@ class _FavoriteState extends State<Favorite> {
                     Navigator.push(
                       context,
                       TransparentRoute(
-                        page: CompanyDescription(detail: detail_business),
+                        page: Company(detail: detail_business),
                       ),
                     );
                   } else {
@@ -175,7 +189,7 @@ class _FavoriteState extends State<Favorite> {
                 },
                 trailing: IconButton(
                   icon: Icon(Icons.delete),
-                  onPressed: () => box.delete(index)
+                  onPressed: () => deleteByValue(name)
                   //  provider.removeFromFavorites(favorite),
                 ),
                 );
@@ -196,4 +210,5 @@ class _FavoriteState extends State<Favorite> {
      
     // return scaffold;
   }
+  
 }
