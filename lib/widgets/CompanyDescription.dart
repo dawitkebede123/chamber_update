@@ -318,23 +318,7 @@ Future<void> deleteByValue( String? targetValue) async {
               IconButton(onPressed: () async{
                 newFavoritesBox.add(arg);
                 ScaffoldMessenger.of(context).clearSnackBars();
-                // if(isFavorite){
-                //   //  Provider.of<ThemeProvider>(context,listen: false).toggleTheme(),
-                //  provider.removeFromFavorites(arg);
-                //   // provider.removeFromFavorites
-                //   // box.delete(name);
-        
-                //  const snackBar = SnackBar(content: Text('Remove successfully'),
-                // backgroundColor: Colors.blue,
-        
-                // );
-                // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  
-                // }
-                // else{
-                // provider.addToFavorites(arg);
-        
-                // await box.put(name,video);
+               
                 const snackBar = SnackBar(content: Text('added successfully'),
                 backgroundColor: Colors.red,
                 
@@ -423,7 +407,13 @@ Future<void> deleteByValue( String? targetValue) async {
             future: imageUrlFuture,
             builder: (context, snapshot) {
         if (snapshot.hasData) {
+          if(image.startsWith('assets/')){
+          return InteractiveViewer(child: Image.asset(image)); 
+          }
+          else{
           return InteractiveViewer(child: Image.asset('assets/images/business_adv/$image')); 
+
+          }
           // print("test");// Use the downloaded URL
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}'); // Handle errors

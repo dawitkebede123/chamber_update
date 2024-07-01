@@ -2,6 +2,7 @@
 
 // ignore_for_file: deprecated_member_use
 
+import 'package:chamber_of_commerce/Models/favorite_Item.dart';
 import 'package:chamber_of_commerce/pages/user/Company.dart';
 import 'package:chamber_of_commerce/pages/user/Home.dart';
 import 'package:chamber_of_commerce/widgets/BottomNavBar.dart';
@@ -13,6 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:chamber_of_commerce/widgets/VideoPlayer.dart';
+import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CompanyDetail extends StatefulWidget {
@@ -40,7 +43,9 @@ class CompanyState extends State<CompanyDetail> {
       final sector = widget.data["Sector"];
          final subSector = widget.data["Sub-Sector"];
     final category = widget.data['Category'];
-    
+     final newFavoritesBox = Provider.of<Box<FavoriteItem>>(context);
+      final arg= FavoriteItem(  name: name,tel: tel,email: email,website: website,category: category,);
+
     var scaffold = Scaffold(
     
        
@@ -99,6 +104,25 @@ class CompanyState extends State<CompanyDetail> {
         child:  Padding(padding: EdgeInsets.all(5),
         child: Column(children: [
           Text(name, style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
+          Row(children: [
+              Spacer(),
+              IconButton(onPressed: () async{
+                newFavoritesBox.add(arg);
+                ScaffoldMessenger.of(context).clearSnackBars();
+               
+                const snackBar = SnackBar(content: Text('added successfully'),
+                backgroundColor: Colors.red,
+                
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                // }
+               
+              },
+              
+               icon:  const Icon(
+               Icons.favorite_border,
+               color: Colors.red,))
+            ],),
           // Row(
           //   children: [
           //      SvgPicture.asset('assets/images/phone_icon.svg'),
