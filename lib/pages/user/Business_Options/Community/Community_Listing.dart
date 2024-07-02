@@ -325,17 +325,20 @@ class _Community_ListingState extends State<Community_Listing> {
 
 // print(items);
 // for (var i = 0; i < items.length; i++) {
- items.sort((a,b)=>a.compareTo(b));
+//  items.sort((a,b)=>a.compareTo(b));
   var currentItem =  items[widget.index];
   // console.log(`
   // if(widget.index == i){
     // index = ${i};
     // print(data);
-    filteredBusinesses = filteredBusinesses.expand((element) {
-      // ... filtering logic using entry.value as Map<String, dynamic>
-      final company = element['Sub-Sector']?.toString() ?? '';
-      return company.startsWith("${currentItem}") ? [element] : [];
-    }).toList();
+   filteredBusinesses = filteredBusinesses.where((element) {
+  // Filtering logic using entry.value as Map<String, dynamic>
+  final company = element['Sub-Sector']?.toString() ?? '';
+  return company.startsWith("${currentItem}");
+}).toList();
+
+  filteredBusinesses.sort((a, b) => a['Account Name'].compareTo(b["Account Name"]));
+  filteredBusinesses.sort((a, b) => b['Is-adv'].compareTo(a["Is-adv"]));
   // print(i);ite
 //   }
 
@@ -370,7 +373,8 @@ class _Community_ListingState extends State<Community_Listing> {
          final website = businessData["Website"];
          final sector = businessData["Sector"];
          final subSector = businessData["Sub-Sector"];
-       
+         bool isAdv = businessData["Is-adv"]=='True';
+     
          // Extract business information based on your data structure
          return Padding(
            padding: const EdgeInsets.only(left: 20.0,right: 20,bottom: 16),
@@ -388,7 +392,7 @@ class _Community_ListingState extends State<Community_Listing> {
                   
                     decoration: BoxDecoration(
                      
-                         color: const Color.fromARGB(255,229,234,232),
+                       color:isAdv?Color.fromARGB(255, 112, 224, 179):const Color.fromARGB(255,229,234,232),
                  
                  borderRadius:BorderRadius.circular(20), // Set border width
                  

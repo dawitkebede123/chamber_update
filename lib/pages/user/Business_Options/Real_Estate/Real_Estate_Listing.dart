@@ -378,7 +378,10 @@ class _Real_Estate_listingState extends State<Real_Estate_listing> {
       final company = element['Sub-Sector']?.toString() ?? '';
       return company.startsWith("${currentItem}") ? [element] : [];
     }).toList();
+     filteredBusinesses.sort((a, b) => a['Account Name'].compareTo(b["Account Name"]));
+  filteredBusinesses.sort((a, b) => b['Is-adv'].compareTo(a["Is-adv"]));
   // print(i);ite
+
 //   }
 
 // }

@@ -239,6 +239,8 @@ class _Agriculture_listingState extends State<Agriculture_listing> {
   // }).toList();
   // print(data);
   List<dynamic> filteredBusinesses = data;
+  List<dynamic> subsectorBusinessList;
+  print(filteredBusinesses);
   if (data.isEmpty) {
     return const Center(child: Text('No businesses found'));
   }
@@ -279,14 +281,21 @@ class _Agriculture_listingState extends State<Agriculture_listing> {
   // if(widget.index == i){
     // index = ${i};
     // print(data);
-    filteredBusinesses = filteredBusinesses.expand((element) {
-      // ... filtering logic using entry.value as Map<String, dynamic>
-      final company = element['Sub-Sector']?.toString() ?? '';
-      return company.startsWith("${currentItem}") ? [element] : [];
-    }).toList();
+   filteredBusinesses = filteredBusinesses.where((element) {
+  // Filtering logic using entry.value as Map<String, dynamic>
+  final company = element['Sub-Sector']?.toString() ?? '';
+  return company.startsWith("${currentItem}");
+}).toList();
+ filteredBusinesses.sort((a, b) => a['Account Name'].compareTo(b["Account Name"]));
+  filteredBusinesses.sort((a, b) => b['Is-adv'].compareTo(a["Is-adv"]));
+// filteredBusinesses.sort((a, b) {
+//   // Replace 'key' with the actual key you want to sort by
+//   return (a['Account Name'] as String).compareTo(b['Account Name'] as String); // Sort by string
+// });
   // print(i);ite
 //   }
 
+ 
 // }
 
 
@@ -318,7 +327,8 @@ class _Agriculture_listingState extends State<Agriculture_listing> {
          final website = businessData["Website"];
          final sector = businessData["Sector"];
          final subSector = businessData["Sub-Sector"];
-       
+         bool isAdv = businessData["Is-adv"]=='True';
+     
          // Extract business information based on your data structure
          return Padding(
            padding: const EdgeInsets.only(left: 20.0,right: 20,bottom: 16),
@@ -336,7 +346,7 @@ class _Agriculture_listingState extends State<Agriculture_listing> {
                   
                     decoration: BoxDecoration(
                      
-                         color: const Color.fromARGB(255,229,234,232),
+                         color:isAdv?Color.fromARGB(255, 112, 224, 179):const Color.fromARGB(255,229,234,232),
                  
                  borderRadius:BorderRadius.circular(20), // Set border width
                  

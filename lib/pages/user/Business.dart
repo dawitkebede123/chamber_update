@@ -140,7 +140,7 @@ class _BusinessState extends State<Business> {
   void initState() {
     super.initState();
     try {
-    _userStream = FirebaseDatabase.instance.ref('Query7').onValue;
+    _userStream = FirebaseDatabase.instance.ref('Query10').onValue;
   } on FirebaseException catch (e) {
     print('Firebase error: ${e.code} - ${e.message}');
     // Handle the error appropriately, potentially display a user-friendly message

@@ -464,15 +464,29 @@ Future<void> deleteByValue( String? targetValue) async {
 
         final sector = company['Sector'];
         final sub_sector = company["Sub-Sector"];
-
-        return Column(
-          children: [
-            Text("Sector",style: TextStyle(fontWeight: FontWeight.bold),),
-            Text(" $sector"),
-            Text("Sub sector",style:TextStyle(fontWeight: FontWeight.bold)),
-            Text(" $sub_sector"),
-          ],
-        );
+DataTable createDataTable() {
+  return DataTable(
+    columns: const [
+      DataColumn(label: Text('Sector', style: TextStyle(fontWeight: FontWeight.bold))),
+      DataColumn(label: Text('Sub Sector', style: TextStyle(fontWeight: FontWeight.bold))),
+    ],
+    rows: [
+      DataRow(cells: [
+        DataCell(Text(company['Sector'])),
+        DataCell(Text(company['Sub-Sector'])),
+      ]),
+    ],
+  );
+}
+        return  createDataTable();
+        //  Column(
+        //   children: [
+        //     Text("Sector",style: TextStyle(fontWeight: FontWeight.bold),),
+        //     Text(" $sector"),
+        //     Text("Sub sector",style:TextStyle(fontWeight: FontWeight.bold)),
+        //     Text(" $sub_sector"),
+        //   ],
+        // );
       },
     ),
         );

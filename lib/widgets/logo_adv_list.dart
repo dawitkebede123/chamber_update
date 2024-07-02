@@ -362,7 +362,7 @@ class _Logo_Adv_ListState extends State<Logo_Adv_List> {
     "Is-adv": "True",
     "Image": "assets/images/business_adv/10.jpg",
     "Video": "bdo.gif",
-    "logo": "B-&-C-logo.jpg"
+    "logo": "BDO-Consultant.jpg"
   },
   {
     "Account Name": "BEACON CONSULTING ARCHTECT AND ENGINEERING PLC",
@@ -5899,6 +5899,19 @@ class _Logo_Adv_ListState extends State<Logo_Adv_List> {
     "Image": "assets/images/business_adv/Mirab Construction B copy.png",
     "Video": "",
     "logo": ""
+  },
+  {
+        "Sector":"FinTech",
+     "Account Name": "Kacha Digital Financial Services SC",
+     "logo": "fintech.png",
+     "Is-adv":"true",
+     "Image":"assets/images/almanac_lists/adv/19.jpg",
+     "Video":"Kacha.gif",
+     "Profile": "Kacha Digital Financial Service S.C. is a premier digital platform that provides seamless financial services in Ethiopia. We are the first private payment instrument issuer licensed by the National Bank of Ethiopia, registered as NPS/PII/002/2022. Our goal is to promote financial inclusion and contribute to Ethiopia's national digitalization ambitions. Our digital platform offers mobile money, bill payments, remittances, and merchant payments, making financial services accessible to all Ethiopians, especially those who are underserved and unserved. We are committed to empowering our customers by providing them with convenient, affordable, and secure digital financial services that meet their everyday needs. At Kacha, we are passionate about driving positive change and creating value for our customers, employees, and society as a whole. We are proud to be part of Ethiopia's digital transformation and are committed to playing our role in achieving the country's economic and social development goals. Thank you for choosing Kacha Digital Financial Service S.C. as your financial services provider.",
+     "Tel": " 677",
+     "Email": "info@kachadfs.com",
+     "Website":"www.kacha.et",
+     "fax":""
   },
   {
     "Account Name": "MIRAB CONSTRUCTION",

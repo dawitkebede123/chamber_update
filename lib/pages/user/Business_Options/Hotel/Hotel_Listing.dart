@@ -281,6 +281,8 @@ class _Hotel_listingState extends State<Hotel_listing> {
       final company = element['Sub-Sector']?.toString() ?? '';
       return company.startsWith("${currentItem}") ? [element] : [];
     }).toList();
+     filteredBusinesses.sort((a, b) => a['Account Name'].compareTo(b["Account Name"]));
+  filteredBusinesses.sort((a, b) => b['Is-adv'].compareTo(a["Is-adv"]));
   // print(i);ite
 //   }
 
@@ -315,7 +317,8 @@ class _Hotel_listingState extends State<Hotel_listing> {
          final website = businessData["Website"];
          final sector = businessData["Sector"];
          final subSector = businessData["Sub-Sector"];
-       
+        bool isAdv = businessData["Is-adv"]=='True';
+        
          // Extract business information based on your data structure
          return Padding(
            padding: const EdgeInsets.only(left: 20.0,right: 20,bottom: 16),
@@ -333,7 +336,7 @@ class _Hotel_listingState extends State<Hotel_listing> {
                   
                     decoration: BoxDecoration(
                      
-                         color: const Color.fromARGB(255,229,234,232),
+                        color:isAdv?Color.fromARGB(255, 112, 224, 179):const Color.fromARGB(255,229,234,232),
                  
                  borderRadius:BorderRadius.circular(20), // Set border width
                  

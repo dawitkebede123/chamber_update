@@ -8455,7 +8455,13 @@ class _Business_Top_ListState extends State<Business_Top_List> {
     "logo": ""
   }
       ] ;
-    
+    int compareMaps(Map<dynamic, dynamic> a, Map<dynamic, dynamic> b) {
+  return (a['Account Name'] as String).compareTo(b['Account Name'] as String);
+}
+
+List<Map<dynamic, dynamic>> offline= offLineData.toList();
+offline.sort(compareMaps);
+offLineData = offline;
       //  data = data.where((element) => element["Is-adv"]=="True").toList();
       // Define a map for filtering logic by index
       // filteredBusinesses = data;
@@ -8586,7 +8592,7 @@ class _Business_Top_ListState extends State<Business_Top_List> {
   //  filteredBusinesses = uniqueBusinesses.toList();
 
 Set<String> seenKeys = {}; // Set to store unique combinations of relevant keys
-
+// filteredBusinesses = filteredBusinesses.sort((a, b) => a['Account Name'].compareTo(b['Account Name']));
 for (final element in filteredBusinesses) {
   // Define the key(s) to compare for uniqueness (e.g., "name" and "age")
   final keyCombination = "${element["Account Name"]}"; 
@@ -8650,8 +8656,8 @@ for (final element in filteredBusinesses) {
       // List<Map<String,dynamic>> unique = uniqueBusinesses.sort((a,b)=>a['Account Name'].compareTo(b['Account Name']));
     // List<Map<String,dynamic>> unique = uniqueBusinesses.sort();
     final Map<dynamic, dynamic> businessData = uniqueBusinesses[index];
-    final String icon = businessData['logo'].toString();
-    Future<String> imageUrlFuture = storeImageInFirebase(icon);
+    // final String icon = businessData['logo'].toString();
+    // Future<String> imageUrlFuture = storeImageInFirebase(icon);
     final String name = businessData["Account Name"].toString();
     // uniqueBusinesses = uniqueBusinesses.sort();
     return Container(
@@ -8666,7 +8672,7 @@ for (final element in filteredBusinesses) {
         },
         child: Column( // Change Row to Column for vertical layout
           children: [
-            if(icon == '')
+            // if(icon == '')
                Container(
               width: 60, // Allow full width for image container
               height: 60.0,
@@ -8681,33 +8687,33 @@ for (final element in filteredBusinesses) {
               child: Center(child: Text(name[0],style: TextStyle(fontSize: 24),))
              
             ),
-            if(icon !='')    
-            Container(
-              width: 60, // Allow full width for image container
-              height: 60.0,
-              decoration: const BoxDecoration(
-                // ... decoration for the container
-                color: Colors.white,
-                // border: Border.all(
-                //   color: Colors.black,
-                // ),
-              ),
-              // if()
-              child: FutureBuilder<String>(
+            // if(icon !='')    
+            // Container(
+            //   width: 60, // Allow full width for image container
+            //   height: 60.0,
+            //   decoration: const BoxDecoration(
+            //     // ... decoration for the container
+            //     color: Colors.white,
+            //     // border: Border.all(
+            //     //   color: Colors.black,
+            //     // ),
+            //   ),
+            //   // if()
+            //   child: FutureBuilder<String>(
                 
-                future: imageUrlFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Image.network(snapshot.data!);
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    return Text('');
-                    // CircularProgressIndicator();
-                  }
-                },
-              ),
-            ),
+            //     future: imageUrlFuture,
+            //     builder: (context, snapshot) {
+            //       if (snapshot.hasData) {
+            //         return Image.network(snapshot.data!);
+            //       } else if (snapshot.hasError) {
+            //         return Text('Error: ${snapshot.error}');
+            //       } else {
+            //         return Text('');
+            //         // CircularProgressIndicator();
+            //       }
+            //     },
+            //   ),
+            // ),
         
         
         
